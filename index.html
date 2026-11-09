@@ -4,15 +4,16 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <meta name="theme-color" content="#0a0e16" />
-<title>ENGLISH SPUR TV — আমার পার্সোনাল টিভি</title>
+<title>Sovan TV — আমার পার্সোনাল টিভি</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js"></script>
 <style>
   *{box-sizing:border-box}
   :root{
     --bg:#0a0e16; --panel:#111827; --line:#25314a;
     --text:#e9eefb; --muted:#8fa0bd;
-    --grad:linear-gradient(135deg,#7c5cff,#00d4ff);
-    --danger:#ff4d5e; --ok:#22d37a; --warn:#ffb020;
+    /* গ্রিন থিম */
+    --grad:linear-gradient(135deg, #10b981, #059669); 
+    --danger:#ff4d5e; --ok:#10b981; --warn:#ffb020;
   }
   html,body{height:100%}
   body{
@@ -20,7 +21,7 @@
     font-family:'Segoe UI',system-ui,-apple-system,'Noto Sans Bengali',sans-serif;
     background:radial-gradient(1200px 700px at 12% -12%,#1b2540 0%,transparent 60%),var(--bg);
   }
-  .app{display:grid;grid-template-columns:340px 1fr;height:100dvh}
+  .app{display:grid;grid-template-columns:360px 1fr;height:100dvh}
 
   .sidebar{
     display:flex;flex-direction:column;min-height:0;
@@ -31,31 +32,52 @@
   .brand .dot{
     width:36px;height:36px;border-radius:11px;background:var(--grad);
     display:grid;place-items:center;font-weight:800;color:#08101f;font-size:15px;
-    box-shadow:0 6px 20px rgba(124,92,255,.45);
+    box-shadow:0 6px 20px rgba(16,185,129,.4); /* গ্রিন গ্লো */
   }
-  .brand h1{font-size:15px;margin:0;letter-spacing:.4px}
+  .brand h1{font-size:16px;margin:0;letter-spacing:.4px;color:#10b981}
   .brand p{margin:1px 0 0;font-size:11px;color:var(--muted)}
   
   .search-wrap{padding:0 14px 8px}
   .search{
     width:100%;padding:10px 12px;border-radius:11px;border:1px solid var(--line);
     background:#0c1320;color:var(--text);font-size:13px;outline:none;font-family:inherit;
+    transition:.2s;
   }
-  .search:focus{border-color:#3b6cff;box-shadow:0 0 0 3px rgba(59,108,255,.15)}
+  .search:focus{border-color:#10b981;box-shadow:0 0 0 3px rgba(16,185,129,.15)}
 
-  .tabs-wrap{
-    padding:0 14px 10px; display:flex; gap:6px; overflow-x:auto; scrollbar-width:none;
+  /* ট্যাব স্টাইল */
+  .tabs-section {
+    padding: 0 14px;
+    margin-bottom: 8px;
   }
-  .tabs-wrap::-webkit-scrollbar{display:none}
+  .tabs-label {
+    font-size: 11px; color: var(--muted); margin-bottom: 6px; display: block;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .tabs-wrap{
+    display:flex; flex-wrap: wrap; gap:6px;
+  }
   .tab{
     padding:6px 12px; border-radius:8px; font-size:12px; font-weight:600;
     background:#151e30; border:1px solid var(--line); color:var(--muted);
     cursor:pointer; white-space:nowrap; transition:.2s; font-family:inherit;
   }
   .tab:hover{background:#1d2942; color:var(--text)}
-  .tab.active{background:var(--grad); border-color:transparent; color:#07101e}
+  
+  /* ভাষার ট্যাব অ্যাক্টিভ (গ্রিন) */
+  #categoryTabs .tab.active{background:var(--grad); border-color:transparent; color:#07101e}
+  /* ধরন ট্যাব অ্যাক্টিভ (অন্যরকম গ্রিন শেড) */
+  #genreTabs .tab.active{background:#064e3b; border-color:#10b981; color:#10b981; font-weight:700}
 
-  .list-head{padding:0 15px 8px;font-size:11px;color:var(--muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  /* স্পেশাল স্টার বাটন */
+  #categoryTabs .tab[data-cat="Playlist"] {
+    color: #ffb020; border-color: #ffb020;
+  }
+  #categoryTabs .tab[data-cat="Playlist"].active {
+    background: #ffb020; color: #000;
+  }
+
+  .list-head{padding:4px 15px 8px;font-size:11px;color:var(--muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .list{flex:1;overflow-y:auto;padding:2px 10px 10px;min-height:0}
   .list::-webkit-scrollbar{width:6px}
   .list::-webkit-scrollbar-thumb{background:#26314a;border-radius:8px}
@@ -64,41 +86,46 @@
     width:100%;display:flex;align-items:center;gap:8px;
     padding:10px 8px;margin-bottom:6px;border-radius:12px;cursor:pointer;
     background:transparent;border:1px solid transparent;color:var(--text);
-    text-align:left;font-family:inherit;transition:.16s;
+    text-align:left;font-family:inherit;transition:.16s;position:relative;
   }
   .ch:hover{background:#141d2e;border-color:var(--line)}
-  .ch.active{background:linear-gradient(90deg,rgba(124,92,255,.22),rgba(0,212,255,.07));border-color:#3d4f7a}
-  
-  /* ম্যানুয়ালি ব্লক করা চ্যানেলের স্টাইল */
+  .ch.active{background:linear-gradient(90deg,rgba(16,185,129,.15),rgba(5,150,105,.05));border-color:#10b981}
   .ch.blocked{opacity:0.4;filter:grayscale(1);}
 
   .ch-num{
     font-size:11.5px;color:var(--muted);min-width:22px;text-align:right;
     font-weight:600;flex:0 0 auto;font-variant-numeric:tabular-nums;
   }
-  .ch.active .ch-num{color:#9fc4ff}
+  .ch.active .ch-num{color:#10b981}
 
   .ch-logo{
     width:34px;height:34px;flex:0 0 34px;border-radius:8px;display:grid;place-items:center;
-    font-weight:800;font-size:10px;background:#1c2740;color:#9fc4ff;text-transform:uppercase;
+    font-weight:800;font-size:10px;background:#1c2740;color:#6ee7b7;text-transform:uppercase;
   }
   .ch.active .ch-logo{background:var(--grad);color:#08101f}
   .ch-meta{display:flex;flex-direction:column;min-width:0;flex:1}
   .ch-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .ch-sub{font-size:10.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .ch-status{width:7px;height:7px;border-radius:50%;flex:0 0 auto;background:#3a4763}
-  .ch-status.ok{background:var(--ok);box-shadow:0 0 8px rgba(34,211,122,.7)}
+  .ch-status.ok{background:var(--ok);box-shadow:0 0 8px rgba(16,185,129,.7)}
   .ch-status.dead{background:var(--danger)}
   .ch-status.checking{background:var(--warn);animation:pulse 1s infinite}
   
-  /* ব্লক বাটনের স্টাইল */
-  .ch-block{
-    opacity:0;padding:6px;border-radius:8px;font-size:12px;color:var(--muted);
+  .action-btn{
+    padding:6px;border-radius:8px;font-size:14px;color:var(--muted);
     transition:.15s;flex:0 0 auto;cursor:pointer; background:transparent; border:none;
+    display:flex; align-items:center; justify-content:center;
   }
-  .ch:hover .ch-block{opacity:1}
+  .action-btn:hover{background:#233152;color:#fff}
+  
+  .ch-fav{ opacity: 0.2; }
+  .ch:hover .ch-fav { opacity: 1; }
+  .ch-fav.active { opacity: 1; color: #ffb020; } 
+
+  .ch-block{ opacity: 0; }
+  .ch:hover .ch-block { opacity: 1; }
   .ch-block:hover{background:#2a1220;color:var(--danger)}
-  .ch.blocked .ch-block{opacity:1; color:var(--ok);} /* আনব্লক করার জন্য সবুজ */
+  .ch.blocked .ch-block{opacity:1; color:var(--ok);}
 
   .empty{color:var(--muted);font-size:12.5px;text-align:center;padding:26px 8px;line-height:1.8}
 
@@ -111,7 +138,7 @@
     display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted);
     cursor:pointer;user-select:none;white-space:nowrap;
   }
-  .toggle input{accent-color:#7c5cff;width:14px;height:14px;cursor:pointer}
+  .toggle input{accent-color:#10b981;width:14px;height:14px;cursor:pointer}
 
   .main{display:flex;flex-direction:column;gap:14px;padding:18px;min-width:0;overflow-y:auto}
   .nowbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -133,9 +160,9 @@
 
   .big-play{
     position:absolute;inset:0;margin:auto;width:76px;height:76px;border-radius:50%;
-    border:none;cursor:pointer;background:rgba(124,92,255,.92);color:#fff;font-size:26px;
+    border:none;cursor:pointer;background:rgba(16,185,129,.9);color:#fff;font-size:26px;
     display:grid;place-items:center;opacity:0;pointer-events:none;transition:.2s;
-    box-shadow:0 12px 40px rgba(124,92,255,.5);
+    box-shadow:0 12px 40px rgba(16,185,129,.4);
   }
   .big-play.show{opacity:1;pointer-events:auto}
   .big-play:hover{transform:scale(1.06)}
@@ -149,7 +176,7 @@
   .err p{margin:0;font-size:12.5px;color:var(--muted);max-width:440px;line-height:1.75}
   .err .spin{
     display:inline-block;width:20px;height:20px;border:2px solid #3a4763;
-    border-top-color:#7c5cff;border-radius:50%;animation:spin .8s linear infinite;margin-bottom:12px;
+    border-top-color:#10b981;border-radius:50%;animation:spin .8s linear infinite;margin-bottom:12px;
   }
   @keyframes spin{to{transform:rotate(360deg)}}
 
@@ -198,22 +225,41 @@
 <div class="app">
   <aside class="sidebar">
     <div class="brand">
-      <div class="dot">B</div>
+      <div class="dot">S</div>
       <div>
-        <h1>SHOVAN TV</h1>
+        <h1>Sovan TV</h1>
         <p>আমার পার্সোনাল টিভি</p>
       </div>
     </div>
+    
     <div class="search-wrap">
-      <input id="search" class="search" type="search" placeholder="🔍  চ্যানেল খুঁজুন (যেমন: ABP, Star)..." />
+      <input id="search" class="search" type="search" placeholder="🔍  চ্যানেল খুঁজুন..." />
     </div>
     
-    <div class="tabs-wrap" id="categoryTabs">
-      <button class="tab active" data-cat="All">সব</button>
-      <button class="tab" data-cat="English">English</button>
-      <button class="tab" data-cat="বাংলা">বাংলা</button>
-      <button class="tab" data-cat="हिंदी">हिंदी</button>
-      <button class="tab" data-cat="Odia">Odia</button>
+    <!-- ভাষা এবং প্লেলিস্ট ট্যাব -->
+    <div class="tabs-section">
+      <span class="tabs-label">🌐 ভাষা (Languages)</span>
+      <div class="tabs-wrap" id="categoryTabs">
+        <button class="tab" data-cat="Playlist">⭐ SK's Playlist</button>
+        <button class="tab active" data-cat="All">সব ভাষা</button>
+        <button class="tab" data-cat="English">English</button>
+        <button class="tab" data-cat="বাংলা">বাংলা</button>
+        <button class="tab" data-cat="हिंदी">हिंदी</button>
+        <button class="tab" data-cat="Odia">Odia</button>
+      </div>
+    </div>
+
+    <!-- চ্যানেলের ধরন বা জেনার ট্যাব -->
+    <div class="tabs-section">
+      <span class="tabs-label">📺 ধরন (Categories)</span>
+      <div class="tabs-wrap" id="genreTabs">
+        <button class="tab active" data-genre="All">সব ধরন</button>
+        <button class="tab" data-genre="News">📰 News</button>
+        <button class="tab" data-genre="Sports">⚽ Sports</button>
+        <button class="tab" data-genre="Movies">🎬 Movies</button>
+        <button class="tab" data-genre="Kids">🧸 Cartoon</button>
+        <button class="tab" data-genre="Music">🎵 Music</button>
+      </div>
     </div>
 
     <div class="list-head" id="listHead">ডাটাবেস লোড হচ্ছে...</div>
@@ -278,15 +324,18 @@
     'Odia': 'https://iptv-org.github.io/iptv/languages/ori.m3u'
   };
 
-  const LS_BLOCKED = 'bosstv.blocked.v1';
+  const LS_BLOCKED = 'sovantv.blocked.v1';
+  const LS_FAVS = 'sovantv.favorites.v1';
   
   let channels = [];
   let health = {};
   let manualBlocked = new Set(JSON.parse(localStorage.getItem(LS_BLOCKED)) || []);
+  let favorites = new Set(JSON.parse(localStorage.getItem(LS_FAVS)) || []);
   
   const checking = new Set();
   let currentId = null;
   let currentCategory = 'All';
+  let currentGenre = 'All';
   let hls = null;
   let hasError = false;
   let isFetching = false;
@@ -307,9 +356,8 @@
   const controls = $('#controls');
   const volEl = $('#vol');
 
-  function saveBlocked() {
-    localStorage.setItem(LS_BLOCKED, JSON.stringify([...manualBlocked]));
-  }
+  function saveBlocked() { localStorage.setItem(LS_BLOCKED, JSON.stringify([...manualBlocked])); }
+  function saveFavs() { localStorage.setItem(LS_FAVS, JSON.stringify([...favorites])); }
 
   const statusOf = id => checking.has(id) ? 'checking' : (health[id] === false ? 'dead' : (health[id] === true ? 'ok' : 'unknown'));
 
@@ -352,7 +400,7 @@
   async function loadMainDatabase() {
     if (isFetching) return;
     isFetching = true;
-    showError('মেইন ডাটাবেস লোড হচ্ছে…', 'প্রায় ১০ হাজার চ্যানেলের লিস্ট আনা হচ্ছে, অপেক্ষা করুন।', true);
+    showError('মেইন ডাটাবেস লোড হচ্ছে…', 'অপেক্ষা করুন।', true);
     listHead.textContent = 'ডাটাবেস ডাউনলোড হচ্ছে...';
 
     try {
@@ -371,7 +419,7 @@
 
     } catch (err) {
       isFetching = false;
-      showError('লোড করা যায়নি', 'ইন্টারনেট বা CORS সমস্যা থাকতে পারে। আবার চেষ্টা করুন।');
+      showError('লোড করা যায়নি', 'ইন্টারনেট বা CORS সমস্যা।');
       listHead.textContent = 'লোড ব্যর্থ';
     }
   }
@@ -399,18 +447,30 @@
 
   $('#categoryTabs').addEventListener('click', e => {
     if (!e.target.classList.contains('tab')) return;
-    $$('.tab').forEach(t => t.classList.remove('active'));
+    $$('#categoryTabs .tab').forEach(t => t.classList.remove('active'));
     e.target.classList.add('active');
     
     const newCat = e.target.dataset.cat;
     currentCategory = newCat;
     renderLimit = 150; 
     
-    if (currentCategory !== 'All' && !fetchedLanguages.has(currentCategory)) {
+    if (currentCategory === 'Playlist' || currentCategory === 'All') {
+      renderList();
+    } else if (!fetchedLanguages.has(currentCategory)) {
       loadLanguage(currentCategory);
     } else {
       renderList();
     }
+  });
+
+  $('#genreTabs').addEventListener('click', e => {
+    if (!e.target.classList.contains('tab')) return;
+    $$('#genreTabs .tab').forEach(t => t.classList.remove('active'));
+    e.target.classList.add('active');
+    
+    currentGenre = e.target.dataset.genre;
+    renderLimit = 150; 
+    renderList();
   });
 
   function visibleChannels() {
@@ -418,16 +478,24 @@
     const showBlocked = showBlockedEl.checked;
     
     return channels.filter(c => {
-      // ম্যানুয়ালি ব্লক করা চ্যানেল ফিল্টার
-      if (!showBlocked && manualBlocked.has(c.url)) return false;
-      
-      // অটোমেটিক ডেড চ্যানেল ফিল্টার (যদি ম্যানুয়াল "দেখাও" অন না থাকে)
-      if (!showBlocked && health[c.id] === false) return false;
+      if (currentCategory === 'Playlist') {
+        if (!favorites.has(c.url)) return false;
+      } else {
+        if (currentCategory !== 'All' && c.sourceLang !== currentCategory) return false;
+      }
 
-      // ল্যাঙ্গুয়েজ ফিল্টার
-      if (currentCategory !== 'All' && c.sourceLang !== currentCategory) return false;
+      if (currentGenre !== 'All') {
+        const g = (c.group || '').toLowerCase();
+        if (currentGenre === 'News' && !g.includes('news')) return false;
+        if (currentGenre === 'Sports' && !g.includes('sport')) return false;
+        if (currentGenre === 'Movies' && !g.includes('movie') && !g.includes('cinema')) return false;
+        if (currentGenre === 'Kids' && !g.includes('kid') && !g.includes('cartoon') && !g.includes('animation')) return false;
+        if (currentGenre === 'Music' && !g.includes('music')) return false;
+      }
+
+      if (!showBlocked && manualBlocked.has(c.url)) return false;
+      if (!showBlocked && health[c.id] === false) return false;
       
-      // সার্চ ফিল্টার
       if (!q) return true;
       return c.name.toLowerCase().includes(q) || (c.group || '').toLowerCase().includes(q);
     });
@@ -437,11 +505,14 @@
     const items = visibleChannels();
     const okCount = items.filter(c => health[c.id] === true).length;
     
-    listHead.innerHTML = `<span>মোট: ${items.length}টি চ্যানেল</span>`;
-    if (okCount > 0) listHead.innerHTML += `<span style="color:#22d37a">● ${okCount} চলছে</span>`;
+    let headText = currentCategory === 'Playlist' ? "⭐ SK's Playlist" : "মোট";
+    if (currentGenre !== 'All') headText += ` (${currentGenre})`;
+    
+    listHead.innerHTML = `<span>${headText}: ${items.length}টি চ্যানেল</span>`;
+    if (okCount > 0) listHead.innerHTML += `<span style="color:#10b981">● ${okCount} চলছে</span>`;
 
     if (!items.length) {
-      listEl.innerHTML = `<p class="empty">এই ক্যাটাগরিতে কোনো চ্যানেল পাওয়া যায়নি।</p>`;
+      listEl.innerHTML = `<p class="empty">${currentCategory === 'Playlist' ? 'আপনার প্লেলিস্ট এখন খালি। চ্যানেলের পাশে ⭐ চাপ দিয়ে যোগ করুন।' : 'এই ফিল্টারে কোনো চ্যানেল নেই।'}</p>`;
       return;
     }
 
@@ -450,9 +521,10 @@
     listEl.innerHTML = toRender.map((c, index) => {
       const st = statusOf(c.id);
       const isManuallyBlocked = manualBlocked.has(c.url);
+      const isFav = favorites.has(c.url);
       
       return `
-      <button class="ch ${c.id === currentId ? 'active' : ''} ${isManuallyBlocked ? 'blocked' : ''}" data-id="${esc(c.id)}">
+      <div class="ch ${c.id === currentId ? 'active' : ''} ${isManuallyBlocked ? 'blocked' : ''}" data-id="${esc(c.id)}">
         <span class="ch-num">${index + 1}.</span>
         <span class="ch-logo">${esc(c.logo)}</span>
         <span class="ch-meta">
@@ -460,8 +532,13 @@
           <span class="ch-sub">${esc(c.group)}</span>
         </span>
         <span class="ch-status ${st}"></span>
-        <button class="ch-block" data-block="${esc(c.url)}" title="${isManuallyBlocked ? 'আনব্লক করুন' : 'লুকিয়ে ফেলুন'}">🚫</button>
-      </button>`;
+        
+        <button class="action-btn ch-fav ${isFav ? 'active' : ''}" data-fav="${esc(c.url)}" title="SK's Playlist">
+          ${isFav ? '⭐' : '☆'}
+        </button>
+
+        <button class="action-btn ch-block" data-block="${esc(c.url)}" title="লুকিয়ে ফেলুন">🚫</button>
+      </div>`;
     }).join('');
 
     if (items.length > renderLimit) {
@@ -515,8 +592,6 @@
 
   async function playChannel(ch) {
     if (!ch) return;
-    
-    // যদি ম্যানুয়ালি ব্লক করা থাকে, প্লে হবে না
     if (manualBlocked.has(ch.url) && !showBlockedEl.checked) return;
 
     currentId = ch.id;
@@ -567,7 +642,7 @@
           destroyHls();
           health[ch.id] = false;
           renderList();
-          showError('স্ট্রিম কাজ করছে না', 'সার্ভারটি সাড়া দিচ্ছে না।');
+          showError('স্ট্রিম কাজ করছে না', 'সার্ভারটি সাড়া দিচ্ছে না।');
         }
       });
       safePlay();
@@ -578,24 +653,28 @@
   }
 
   listEl.addEventListener('click', e => {
-    // ব্লক বাটনে ক্লিক করলে
+    const favBtn = e.target.closest('[data-fav]');
+    if (favBtn) {
+      e.preventDefault(); e.stopPropagation();
+      const url = favBtn.dataset.fav;
+      if (favorites.has(url)) favorites.delete(url);
+      else favorites.add(url);
+      saveFavs();
+      renderList();
+      return;
+    }
+
     const blockBtn = e.target.closest('[data-block]');
     if (blockBtn) {
-      e.preventDefault(); // যাতে চ্যানেল প্লে না হয়ে যায়
-      e.stopPropagation();
-      
+      e.preventDefault(); e.stopPropagation();
       const url = blockBtn.dataset.block;
-      if (manualBlocked.has(url)) {
-        manualBlocked.delete(url); // আনব্লক
-      } else {
-        manualBlocked.add(url); // ব্লক
-      }
+      if (manualBlocked.has(url)) manualBlocked.delete(url);
+      else manualBlocked.add(url);
       saveBlocked();
       renderList();
       return;
     }
 
-    // চ্যানেলে ক্লিক করলে
     const item = e.target.closest('.ch');
     if (item) playChannel(channels.find(c => c.id === item.dataset.id));
   });
