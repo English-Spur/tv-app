@@ -22,12 +22,13 @@
   }
   .app{display:grid;grid-template-columns:320px 1fr;height:100dvh}
 
+  /* ---------- Sidebar ---------- */
   .sidebar{
     display:flex;flex-direction:column;min-height:0;
     background:linear-gradient(180deg,#0e1421,#0a0e16);
     border-right:1px solid var(--line);
   }
-  .brand{display:flex;align-items:center;gap:11px;padding:16px 16px 12px}
+  .brand{display:flex;align-items:center;gap:11px;padding:16px 16px 10px}
   .brand .dot{
     width:36px;height:36px;border-radius:11px;background:var(--grad);
     display:grid;place-items:center;font-weight:800;color:#08101f;font-size:15px;
@@ -35,12 +36,27 @@
   }
   .brand h1{font-size:15px;margin:0;letter-spacing:.4px}
   .brand p{margin:1px 0 0;font-size:11px;color:var(--muted)}
-  .search-wrap{padding:0 14px 6px}
+  
+  .search-wrap{padding:0 14px 8px}
   .search{
     width:100%;padding:10px 12px;border-radius:11px;border:1px solid var(--line);
     background:#0c1320;color:var(--text);font-size:13px;outline:none;font-family:inherit;
   }
   .search:focus{border-color:#3b6cff;box-shadow:0 0 0 3px rgba(59,108,255,.15)}
+
+  /* ---------- Category Tabs ---------- */
+  .tabs-wrap{
+    padding:0 14px 10px; display:flex; gap:6px; overflow-x:auto; scrollbar-width:none;
+  }
+  .tabs-wrap::-webkit-scrollbar{display:none}
+  .tab{
+    padding:6px 12px; border-radius:8px; font-size:12px; font-weight:600;
+    background:#151e30; border:1px solid var(--line); color:var(--muted);
+    cursor:pointer; white-space:nowrap; transition:.2s; font-family:inherit;
+  }
+  .tab:hover{background:#1d2942; color:var(--text)}
+  .tab.active{background:var(--grad); border-color:transparent; color:#07101e}
+
   .list-head{padding:0 15px 8px;font-size:11px;color:var(--muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .list{flex:1;overflow-y:auto;padding:2px 10px 10px;min-height:0}
   .list::-webkit-scrollbar{width:6px}
@@ -86,6 +102,7 @@
   }
   .toggle input{accent-color:#7c5cff;width:14px;height:14px;cursor:pointer}
 
+  /* ---------- Main ---------- */
   .main{display:flex;flex-direction:column;gap:14px;padding:18px;min-width:0;overflow-y:auto}
   .nowbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
   .nowbar h2{margin:0;font-size:17px}
@@ -170,11 +187,12 @@
   dialog form{padding:20px}
   dialog h3{margin:0 0 16px;font-size:16px}
   dialog label{display:block;font-size:12px;color:var(--muted);margin-bottom:12px}
-  dialog input{
+  dialog input, dialog textarea{
     width:100%;margin-top:6px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);
     background:#0c1320;color:var(--text);font-size:13.5px;outline:none;font-family:inherit;
   }
-  dialog input:focus{border-color:#3b6cff;box-shadow:0 0 0 3px rgba(59,108,255,.15)}
+  dialog textarea{resize:vertical;min-height:100px}
+  dialog input:focus, dialog textarea:focus{border-color:#3b6cff;box-shadow:0 0 0 3px rgba(59,108,255,.15)}
   .dlg-actions{display:flex;align-items:center;gap:8px;margin-top:18px}
   .hint{font-size:11.5px;color:var(--muted);line-height:1.7;margin:0}
 
@@ -200,11 +218,22 @@
     <div class="search-wrap">
       <input id="search" class="search" type="search" placeholder="🔍  চ্যানেল খুঁজুন..." />
     </div>
+    
+    <!-- Language Tabs -->
+    <div class="tabs-wrap" id="categoryTabs">
+      <button class="tab active" data-cat="All">সব</button>
+      <button class="tab" data-cat="English">English</button>
+      <button class="tab" data-cat="বাংলা">বাংলা</button>
+      <button class="tab" data-cat="हिंदी">हिंदी</button>
+      <button class="tab" data-cat="Odia">Odia</button>
+    </div>
+
     <div class="list-head" id="listHead">চ্যানেল যাচাই করা হচ্ছে…</div>
     <div id="channelList" class="list"></div>
     <div class="sidebar-foot">
-      <button class="btn primary full" id="btnAdd">+ নতুন চ্যানেল যোগ করুন</button>
-      <div class="foot-row">
+      <button class="btn primary full" id="btnImportM3U">📥 M3U প্লেলিস্ট ইমপোর্ট</button>
+      <button class="btn full" id="btnAdd" style="margin-top:6px">+ ম্যানুয়ালি চ্যানেল যোগ করুন</button>
+      <div class="foot-row" style="margin-top:6px">
         <button class="btn small" id="btnRecheck">🔍 আবার চেক</button>
         <label class="toggle"><input type="checkbox" id="showDead"><span>মৃত দেখাও</span></label>
       </div>
@@ -256,9 +285,9 @@
       <input name="logo" maxlength="4" placeholder="BTV" />
     </label>
     <label>গ্রুপ
-      <input name="group" placeholder="English / বাংলা / हिंदी / Odia" />
+      <input name="group" placeholder="English / বাংলা / हिंदी" />
     </label>
-    <p class="hint">💡 সেভ করার পর অ্যাপ নিজেই লিংকটা টেস্ট করবে। কাজ না করলে চ্যানেলটা অটো-লুকানো থাকবে।</p>
+    <p class="hint">💡 সেভ করার পর অ্যাপ নিজেই লিংকটা টেস্ট করবে।</p>
     <div class="dlg-actions">
       <button type="button" class="btn danger" id="dlgDelete" hidden>ডিলিট</button>
       <span class="spacer"></span>
@@ -268,79 +297,87 @@
   </form>
 </dialog>
 
+<dialog id="m3uDialog">
+  <form id="m3uForm" method="dialog">
+    <h3>M3U প্লেলিস্ট ইমপোর্ট করুন</h3>
+    <label>M3U প্লেলিস্ট URL
+      <input name="m3uUrl" placeholder="http://example.com/playlist.m3u" />
+    </label>
+    <p class="hint" style="margin:8px 0;">অথবা সরাসরি M3U টেক্সট পেস্ট করুন:</p>
+    <label>
+      <textarea name="m3uText" placeholder="#EXTM3U&#10;#EXTINF:-1 tvg-logo=&quot;...&quot; group-title=&quot;Sports&quot;,Star Sports 1&#10;http://example.com/stream.m3u8"></textarea>
+    </label>
+    <div class="dlg-actions">
+      <span class="spacer"></span>
+      <button type="button" class="btn" id="m3uCancel">বাতিল</button>
+      <button type="submit" class="btn primary">লোড করুন</button>
+    </div>
+  </form>
+</dialog>
+
 <script>
 (() => {
   'use strict';
 
   const $  = (s, el = document) => el.querySelector(s);
+  const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const esc = s => String(s ?? '').replace(/[&<>"']/g, m =>
     ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
   const uid = () => (crypto.randomUUID?.() || 'id' + Date.now() + Math.random().toString(36).slice(2, 8));
 
-  const LS_CH     = 'bosstv.channels.v5';
-  const LS_LAST   = 'bosstv.last.v5';
-  const LS_HEALTH = 'bosstv.health.v5';
+  const LS_CH     = 'bosstv.channels.v8';
+  const LS_LAST   = 'bosstv.last.v8';
+  const LS_HEALTH = 'bosstv.health.v8';
   const TTL = 6 * 60 * 60 * 1000;
 
   /* =========================================================
-     🌍 Free-to-Air চ্যানেল লিস্ট
-     English • हिंदी • বাংলা • Odia
+     চ্যানেল লিস্ট (Pluto TV & Official Streams)
      ========================================================= */
   const DEFAULT_CHANNELS = [
-    /* ================= English / International ================= */
+    /* ================= English ================= */
     { id: 'dw-en',    name: 'DW English',         group: 'English', logo: 'DW',
       url: 'https://dwamdstream102.akamaized.net/hls/live/2015525/dwstream102/index.m3u8' },
-    { id: 'dw-news',  name: 'DW News',            group: 'English', logo: 'DW',
-      url: 'https://dwamdstream103.akamaized.net/hls/live/2015526/dwstream103/index.m3u8' },
     { id: 'aje-en',   name: 'Al Jazeera English', group: 'English', logo: 'AJ',
       url: 'https://live-hls-web-aje.getaj.net/AJE/index.m3u8' },
     { id: 'f24-en',   name: 'France 24 English',  group: 'English', logo: 'F24',
       url: 'https://static.france24.com/live/F24_EN_LO_HLS/live_web.m3u8' },
-    { id: 'rb-tv',    name: 'Red Bull TV',        group: 'English', logo: 'RB',
-      url: 'https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8' },
-    { id: 'cgtn-en',  name: 'CGTN English',       group: 'English', logo: 'CGTN',
-      url: 'https://livedoc.cgtn.com/500d/prog_index.m3u8' },
-    { id: 'cgtn-doc', name: 'CGTN Documentary',   group: 'English', logo: 'CGTN',
-      url: 'https://livedoc.cgtn.com/500e/prog_index.m3u8' },
     { id: 'nasa',     name: 'NASA TV',            group: 'English', logo: 'NASA',
       url: 'https://ntv1.akamaized.net/hls/live/2014075/NASA-NTV1-HLS/master.m3u8' },
-    { id: 'euronews', name: 'Euronews English',   group: 'English', logo: 'EU',
-      url: 'https://euronews.alteox.app/hls/en_stream.m3u8' },
-    { id: 'trtworld', name: 'TRT World',          group: 'English', logo: 'TRT',
-      url: 'https://tv-trtworld.medya.trt.com.tr/master.m3u8' },
-    { id: 'nhk',      name: 'NHK World Japan',    group: 'English', logo: 'NHK',
-      url: 'https://nhkwtvglobal-i.akamaihd.net/hls/live/2003459/nhkwtvglobal/index.m3u8' },
+    { id: 'rb-tv',    name: 'Red Bull TV',        group: 'English', logo: 'RB',
+      url: 'https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8' },
+    { id: 'pluto-scifi', name: 'Pluto TV Sci-Fi', group: 'English', logo: 'PLUTO',
+      url: 'https://service-stitcher.clusters.pluto.tv/stitch/hls/channel/5f4d878d3d19b30007d2e782/master.m3u8' },
+    { id: 'pluto-action', name: 'Pluto TV Action', group: 'English', logo: 'PLUTO',
+      url: 'https://service-stitcher.clusters.pluto.tv/stitch/hls/channel/5f4d879f3d19b30007d2e7c1/master.m3u8' },
+    { id: 'pluto-news', name: 'Pluto TV News', group: 'English', logo: 'PLUTO',
+      url: 'https://service-stitcher.clusters.pluto.tv/stitch/hls/channel/5f4d86e83d19b30007d2e6e2/master.m3u8' },
     { id: 'cbs-news', name: 'CBS News',           group: 'English', logo: 'CBS',
       url: 'https://cbsn-us.cbsnstream.cbsnews.com/out/v1/55a8648e8f134e82a470f83d562deeca/master.m3u8' },
-    { id: 'fox-now',  name: 'LiveNOW from FOX',   group: 'English', logo: 'FOX',
-      url: 'https://fox-foxnewsnow-samsungus.amagi.tv/playlist.m3u8' },
-    { id: 'abc-news', name: 'ABC News Live',      group: 'English', logo: 'ABC',
-      url: 'https://content.uplynk.com/channel/3324f2467c414329b3b0cc5cd987b6be.m3u8' },
-    { id: 'bloomberg',name: 'Bloomberg TV+',      group: 'English', logo: 'BB',
-      url: 'https://bloomberg-bloombergtv-1-us.rakuten.wurl.tv/playlist.m3u8' },
 
-    /* ================= हिंदी / Hindi ================= */
-    { id: 'dd-national', name: 'DD National', group: 'हिंदी', logo: 'DD',
-      url: 'https://d3l5cyh7h7kx6g.cloudfront.net/DDNational/master.m3u8' },
-    { id: 'dd-news',     name: 'DD News',     group: 'हिंदी', logo: 'DD',
-      url: 'https://d3l5cyh7h7kx6g.cloudfront.net/DDNews/master.m3u8' },
-    { id: 'dd-india',    name: 'DD India',    group: 'हिंदी', logo: 'DD',
-      url: 'https://d3l5cyh7h7kx6g.cloudfront.net/DDIndia/master.m3u8' },
-    { id: 'dd-bharati',  name: 'DD Bharati',  group: 'हिंदी', logo: 'DD',
-      url: 'https://d3l5cyh7h7kx6g.cloudfront.net/DDBharati/master.m3u8' },
-
-    /* ================= বাংলা / Bangla ================= */
-    { id: 'dd-bangla', name: 'DD Bangla', group: 'বাংলা', logo: 'DD',
-      url: 'https://d3l5cyh7h7kx6g.cloudfront.net/DDBangla/master.m3u8' },
-    { id: 'btv-world', name: 'BTV World', group: 'বাংলা', logo: 'BTV',
+    /* ================= বাংলা ================= */
+    { id: 'somoy',    name: 'Somoy News', group: 'বাংলা', logo: 'SOM',
+      url: 'https://somoynews.akamaized.net/hls/live/2006583/somoynews/master.m3u8' },
+    { id: 'jamuna',   name: 'Jamuna TV',  group: 'বাংলা', logo: 'JAM',
+      url: 'https://jamuna.akamaized.net/hls/live/2021383/jamuna/master.m3u8' },
+    { id: 'btv-world',name: 'BTV World',  group: 'বাংলা', logo: 'BTV',
       url: 'https://btvlive.btv.gov.bd/hls/btvworld.m3u8' },
+
+    /* ================= हिंदी ================= */
+    { id: 'ndtv-india', name: 'NDTV India',  group: 'हिंदी', logo: 'NDTV',
+      url: 'https://ndtvindiaelemarchana.akamaized.net/hls/live/2003679/ndtvindia/master.m3u8' },
+    { id: 'aajtak',     name: 'Aaj Tak',     group: 'हिंदी', logo: 'AAJ',
+      url: 'https://aajtaklive.akamaized.net/hls/live/2014417/aajtak/master.m3u8' },
+    { id: 'indiatoday', name: 'India Today', group: 'हिंदी', logo: 'IT',
+      url: 'https://feeds.intoday.in/hls/itpl.m3u8' },
+    { id: 'abp-news',   name: 'ABP News',    group: 'हिंदी', logo: 'ABP',
+      url: 'https://abpnews.akamaized.net/hls/live/2005892/abpnews/master.m3u8' },
 
     /* ================= Odia ================= */
     { id: 'dd-odia', name: 'DD Odia', group: 'Odia', logo: 'DD',
       url: 'https://d3l5cyh7h7kx6g.cloudfront.net/DDOdia/master.m3u8' },
 
-    /* ================= Test / Demo ================= */
-    { id: 'mux-demo', name: 'Demo Stream (Test)', group: 'Test', logo: 'TEST',
+    /* ================= Test ================= */
+    { id: 'mux-demo', name: 'Demo Stream (Test)', group: 'English', logo: 'TEST',
       url: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8' }
   ];
 
@@ -348,6 +385,7 @@
   let health     = loadHealth();
   const checking = new Set();
   let currentId  = null;
+  let currentCategory = 'All'; // For Tabs
   let hls        = null;
   let editTargetId = null;
   let hasError   = false;
@@ -391,12 +429,23 @@
   const volEl    = $('#vol');
   const dialog   = $('#editDialog');
   const form     = $('#editForm');
+  const m3uDialog= $('#m3uDialog');
+  const m3uForm  = $('#m3uForm');
 
-  /* ---------------- Rendering ---------------- */
+  /* ---------------- Tabs Logic ---------------- */
+  $('#categoryTabs').addEventListener('click', e => {
+    if (!e.target.classList.contains('tab')) return;
+    $$('.tab').forEach(t => t.classList.remove('active'));
+    e.target.classList.add('active');
+    currentCategory = e.target.dataset.cat;
+    renderList();
+  });
+
   function visibleChannels() {
     const q = searchEl.value.trim().toLowerCase();
     return channels.filter(c => {
       if (!showDead.checked && isDead(c.id)) return false;
+      if (currentCategory !== 'All' && c.group !== currentCategory) return false;
       if (!q) return true;
       return c.name.toLowerCase().includes(q) || (c.group || '').toLowerCase().includes(q);
     });
@@ -416,8 +465,8 @@
 
     if (!items.length) {
       listEl.innerHTML = `<p class="empty">
-        ${channels.length ? 'এই ফিল্টারে কোনো চ্যানেল নেই।' : 'কোনো চ্যানেল নেই।'}<br>
-        ${deadCount ? `🔴 ${deadCount}টি লিংক কাজ করছে না —<br>“মৃত দেখাও” টিক দিয়ে দেখুন।` : ''}
+        এই ক্যাটাগরিতে কোনো চ্যানেল পাওয়া যায়নি।<br>
+        ${deadCount ? `🔴 ${deadCount}টি লিংক কাজ করছে না — “মৃত দেখাও” টিক দিয়ে দেখুন।` : ''}
       </p>`;
       return;
     }
@@ -442,21 +491,28 @@
     $('#npGroup').textContent = ch ? (ch.group || '') : '';
   }
 
-  /* ---------------- Health check ---------------- */
-  async function testStream(url, timeout = 9000) {
+  async function testStream(url, timeout = 8000) {
     if (!url) return false;
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), timeout);
+    
     try {
-      const res = await fetch(url, { signal: ctrl.signal, cache: 'no-store', redirect: 'follow' });
+      const res = await fetch(url, { signal: ctrl.signal, cache: 'no-store' });
       if (!res.ok) return false;
       const txt = await res.text();
-      return txt.includes('#EXTM3U') || txt.includes('#EXT-X-') || txt.trim().length > 0;
+      return txt.includes('#EXTM3U') || txt.includes('#EXT-X-');
     } catch (err) {
-      if (err && err.name === 'AbortError') return false;
-      // CORS ব্লক → Safari-তে native HLS চলতে পারে
-      if (video.canPlayType('application/vnd.apple.mpegurl')) return true;
-      return false;
+      clearTimeout(timer);
+      if (err.name === 'AbortError') return false;
+      try {
+        const ctrl2 = new AbortController();
+        const timer2 = setTimeout(() => ctrl2.abort(), timeout);
+        await fetch(url, { mode: 'no-cors', signal: ctrl2.signal });
+        clearTimeout(timer2);
+        return video.canPlayType('application/vnd.apple.mpegurl') !== '';
+      } catch (err2) {
+        return false;
+      }
     } finally {
       clearTimeout(timer);
     }
@@ -467,9 +523,7 @@
     if (!targets.length) { renderList(); return; }
 
     if (booting && !currentId) {
-      showError('চ্যানেল যাচাই করা হচ্ছে…',
-        'প্রতিটি লিংক টেস্ট করে দেখা হচ্ছে কোনটা আসলে চলে। কাজ করা প্রথম চ্যানেলটাই অটো-প্লে হবে।',
-        true);
+      showError('চ্যানেল যাচাই করা হচ্ছে…', 'প্রতিটি লিংক টেস্ট করে দেখা হচ্ছে। কাজ করা প্রথম চ্যানেলটাই অটো-প্লে হবে।', true);
     }
 
     let i = 0;
@@ -492,12 +546,10 @@
     booting = false;
 
     if (!currentId) {
-      showError('কোনো চ্যানেল এখন চলছে না',
-        'সব লিংক যাচাই করা হয়েছে, কিন্তু কোনোটাই সাড়া দেয়নি। “🔍 আবার চেক” চাপুন, অথবা ✎ দিয়ে নিজের লিংক যোগ করুন।');
+      showError('কোনো চ্যানেল এখন চলছে না', 'সব লিংক যাচাই করা হয়েছে। “🔍 আবার চেক” চাপুন।');
     }
   }
 
-  /* ---------------- Player ---------------- */
   function destroyHls() {
     if (hls) { try { hls.destroy(); } catch {} hls = null; }
   }
@@ -555,8 +607,7 @@
         } else {
           destroyHls();
           markDead(ch.id);
-          if (!fromBoot) showError('স্ট্রিম লোড করা যায়নি',
-            'এই লিংকটা আর কাজ করছে না — চ্যানেলটি লিস্ট থেকে অটো-লুকানো হয়েছে।');
+          if (!fromBoot) showError('স্ট্রিম লোড করা যায়নি', 'এই লিংকটা আর কাজ করছে না।');
         }
       });
       safePlay();
@@ -604,7 +655,7 @@
   video.addEventListener('error', () => {
     if (!currentId) return;
     markDead(currentId);
-    showError('ভিডিও চালানো যাচ্ছে না', 'এই লিংকটা সাড়া দিচ্ছে না — চ্যানেলটি লিস্ট থেকে লুকানো হয়েছে।');
+    showError('ভিডিও চালানো যাচ্ছে না', 'এই লিংকটা সাড়া দিচ্ছে না।');
   });
 
   let hideTimer;
@@ -657,7 +708,7 @@
       destroyHls();
       video.pause(); video.removeAttribute('src'); video.load();
       setNowPlaying(null);
-      showError('চ্যানেল ডিলিট করা হয়েছে', 'নতুন চ্যানেল যোগ করুন বা লিস্ট থেকে বেছে নিন।');
+      showError('চ্যানেল ডিলিট করা হয়েছে', 'লিস্ট থেকে নতুন চ্যানেল বেছে নিন।');
     }
     saveChannels(); saveHealth(); renderList(); dialog.close();
   };
@@ -692,13 +743,78 @@
       health[target.id] = { ok, ts: Date.now() };
       saveHealth(); renderList();
       if (ok) playChannel(target);
-      else showError('লিংকটি কাজ করছে না',
-        'সার্ভারটি সাড়া দেয়নি বা CORS ব্লক করছে। অন্য একটি .m3u8 লিংক দিয়ে চেষ্টা করুন।');
+      else showError('লিংকটি কাজ করছে না', 'সার্ভারটি সাড়া দেয়নি বা CORS ব্লক করছে।');
     });
   });
 
+  $('#btnImportM3U').onclick = () => {
+    m3uForm.reset();
+    m3uDialog.showModal();
+  };
+  $('#m3uCancel').onclick = () => m3uDialog.close();
+
+  m3uForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    const fd = new FormData(m3uForm);
+    const url = (fd.get('m3uUrl') || '').toString().trim();
+    let text = (fd.get('m3uText') || '').toString().trim();
+
+    m3uDialog.close();
+
+    if (url) {
+      showError('প্লেলিস্ট ডাউনলোড হচ্ছে…', 'অনুগ্রহ করে অপেক্ষা করুন।', true);
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('Fetch failed');
+        text = await res.text();
+      } catch (err) {
+        showError('প্লেলিস্ট লোড করা যায়নি', 'লিংকটি CORS ব্লক করতে পারে। সরাসরি M3U টেক্সট পেস্ট করে চেষ্টা করুন।');
+        return;
+      }
+    }
+
+    if (!text.includes('#EXTM3U')) {
+      showError('ভুল ফরম্যাট', 'এটি সঠিক M3U প্লেলিস্ট ফাইল নয়।');
+      return;
+    }
+
+    const lines = text.split('\n');
+    let added = 0;
+    let currentInfo = null;
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (line.startsWith('#EXTINF:')) {
+        currentInfo = { name: 'Unknown', logo: 'TV', group: 'IPTV' };
+        const nameMatch = line.match(/,(.+)$/);
+        if (nameMatch) currentInfo.name = nameMatch[1].trim();
+        const groupMatch = line.match(/group-title="([^"]+)"/);
+        if (groupMatch) currentInfo.group = groupMatch[1].trim();
+      } else if (line && !line.startsWith('#') && currentInfo) {
+        channels.push({
+          id: uid(),
+          name: currentInfo.name,
+          url: line,
+          logo: currentInfo.name.slice(0, 3).toUpperCase(),
+          group: currentInfo.group
+        });
+        added++;
+        currentInfo = null;
+      }
+    }
+
+    if (added > 0) {
+      saveChannels();
+      renderList();
+      booting = true;
+      checkAll(true);
+    } else {
+      showError('কোনো চ্যানেল পাওয়া যায়নি', 'M3U ফাইলটি খালি বা ত্রুটিপূর্ণ।');
+    }
+  });
+
   document.addEventListener('keydown', e => {
-    if (dialog.open) return;
+    if (dialog.open || m3uDialog.open) return;
     if (/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName) && e.key !== 'Escape') return;
     switch (e.key.toLowerCase()) {
       case ' ': case 'k': e.preventDefault(); togglePlay(); break;
@@ -710,7 +826,6 @@
     }
   });
 
-  /* ---------------- Boot ---------------- */
   renderList();
   syncUI();
 
