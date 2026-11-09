@@ -11,7 +11,6 @@
   :root{
     --bg:#0a0e16; --panel:#111827; --line:#25314a;
     --text:#e9eefb; --muted:#8fa0bd;
-    /* গ্রিন থিম */
     --grad:linear-gradient(135deg, #10b981, #059669); 
     --danger:#ff4d5e; --ok:#10b981; --warn:#ffb020;
   }
@@ -32,7 +31,7 @@
   .brand .dot{
     width:36px;height:36px;border-radius:11px;background:var(--grad);
     display:grid;place-items:center;font-weight:800;color:#08101f;font-size:15px;
-    box-shadow:0 6px 20px rgba(16,185,129,.4); /* গ্রিন গ্লো */
+    box-shadow:0 6px 20px rgba(16,185,129,.4);
   }
   .brand h1{font-size:16px;margin:0;letter-spacing:.4px;color:#10b981}
   .brand p{margin:1px 0 0;font-size:11px;color:var(--muted)}
@@ -45,7 +44,6 @@
   }
   .search:focus{border-color:#10b981;box-shadow:0 0 0 3px rgba(16,185,129,.15)}
 
-  /* ট্যাব স্টাইল */
   .tabs-section {
     padding: 0 14px;
     margin-bottom: 8px;
@@ -64,18 +62,11 @@
   }
   .tab:hover{background:#1d2942; color:var(--text)}
   
-  /* ভাষার ট্যাব অ্যাক্টিভ (গ্রিন) */
   #categoryTabs .tab.active{background:var(--grad); border-color:transparent; color:#07101e}
-  /* ধরন ট্যাব অ্যাক্টিভ (অন্যরকম গ্রিন শেড) */
   #genreTabs .tab.active{background:#064e3b; border-color:#10b981; color:#10b981; font-weight:700}
 
-  /* স্পেশাল স্টার বাটন */
-  #categoryTabs .tab[data-cat="Playlist"] {
-    color: #ffb020; border-color: #ffb020;
-  }
-  #categoryTabs .tab[data-cat="Playlist"].active {
-    background: #ffb020; color: #000;
-  }
+  #categoryTabs .tab[data-cat="Playlist"] { color: #ffb020; border-color: #ffb020; }
+  #categoryTabs .tab[data-cat="Playlist"].active { background: #ffb020; color: #000; }
 
   .list-head{padding:4px 15px 8px;font-size:11px;color:var(--muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .list{flex:1;overflow-y:auto;padding:2px 10px 10px;min-height:0}
@@ -92,10 +83,7 @@
   .ch.active{background:linear-gradient(90deg,rgba(16,185,129,.15),rgba(5,150,105,.05));border-color:#10b981}
   .ch.blocked{opacity:0.4;filter:grayscale(1);}
 
-  .ch-num{
-    font-size:11.5px;color:var(--muted);min-width:22px;text-align:right;
-    font-weight:600;flex:0 0 auto;font-variant-numeric:tabular-nums;
-  }
+  .ch-num{font-size:11.5px;color:var(--muted);min-width:22px;text-align:right;font-weight:600;flex:0 0 auto;font-variant-numeric:tabular-nums;}
   .ch.active .ch-num{color:#10b981}
 
   .ch-logo{
@@ -129,24 +117,15 @@
 
   .empty{color:var(--muted);font-size:12.5px;text-align:center;padding:26px 8px;line-height:1.8}
 
-  .sidebar-foot{
-    padding:12px 14px;border-top:1px solid var(--line);
-    display:flex;flex-direction:column;gap:8px;
-  }
+  .sidebar-foot{padding:12px 14px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px;}
   .foot-row{display:flex;align-items:center;gap:8px}
-  .toggle{
-    display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted);
-    cursor:pointer;user-select:none;white-space:nowrap;
-  }
+  .toggle{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted);cursor:pointer;user-select:none;white-space:nowrap;}
   .toggle input{accent-color:#10b981;width:14px;height:14px;cursor:pointer}
 
   .main{display:flex;flex-direction:column;gap:14px;padding:18px;min-width:0;overflow-y:auto}
   .nowbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
   .nowbar h2{margin:0;font-size:17px}
-  .badge{
-    font-size:10.5px;font-weight:700;letter-spacing:.8px;padding:3px 8px;border-radius:6px;
-    background:#2a1220;color:#ff6b7d;border:1px solid #4a1c2a;display:flex;align-items:center;gap:5px;
-  }
+  .badge{font-size:10.5px;font-weight:700;letter-spacing:.8px;padding:3px 8px;border-radius:6px;background:#2a1220;color:#ff6b7d;border:1px solid #4a1c2a;display:flex;align-items:center;gap:5px;}
   .badge .pulse{width:6px;height:6px;border-radius:50%;background:#ff4d5e;animation:pulse 1.4s infinite}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
   .nowbar .sub{font-size:12px;color:var(--muted)}
@@ -156,7 +135,7 @@
     border-radius:18px;overflow:hidden;border:1px solid var(--line);
     box-shadow:0 24px 70px rgba(0,0,0,.55);
   }
-  video{width:100%;height:100%;display:block;object-fit:contain;background:#000}
+  video{width:100%;height:100%;display:block;object-fit:contain;background:#000;cursor:pointer;}
 
   .big-play{
     position:absolute;inset:0;margin:auto;width:76px;height:76px;border-radius:50%;
@@ -169,15 +148,12 @@
 
   .err{
     position:absolute;inset:0;display:none;place-items:center;text-align:center;padding:24px;
-    background:linear-gradient(180deg,rgba(6,10,18,.88),rgba(6,10,18,.97));
+    background:linear-gradient(180deg,rgba(6,10,18,.88),rgba(6,10,18,.97)); pointer-events:none;
   }
   .err.show{display:grid}
   .err h3{margin:0 0 8px;font-size:15px}
   .err p{margin:0;font-size:12.5px;color:var(--muted);max-width:440px;line-height:1.75}
-  .err .spin{
-    display:inline-block;width:20px;height:20px;border:2px solid #3a4763;
-    border-top-color:#10b981;border-radius:50%;animation:spin .8s linear infinite;margin-bottom:12px;
-  }
+  .err .spin{display:inline-block;width:20px;height:20px;border:2px solid #3a4763;border-top-color:#10b981;border-radius:50%;animation:spin .8s linear infinite;margin-bottom:12px;}
   @keyframes spin{to{transform:rotate(360deg)}}
 
   .controls{
@@ -198,15 +174,9 @@
     -webkit-appearance:none;appearance:none;height:4px;border-radius:4px;width:92px;
     background:rgba(255,255,255,.25);outline:none;cursor:pointer;
   }
-  input[type=range]::-webkit-slider-thumb{
-    -webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:#fff;
-  }
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:#fff;}
   .spacer{flex:1}
-  .btn{
-    padding:9px 15px;border-radius:11px;border:1px solid var(--line);background:#151e30;
-    color:var(--text);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;
-    transition:.15s;
-  }
+  .btn{padding:9px 15px;border-radius:11px;border:1px solid var(--line);background:#151e30;color:var(--text);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:.15s;}
   .btn:hover{background:#1d2942}
   .btn.primary{background:var(--grad);border:none;color:#07101e}
   .btn.primary:hover{filter:brightness(1.12)}
@@ -236,7 +206,6 @@
       <input id="search" class="search" type="search" placeholder="🔍  চ্যানেল খুঁজুন..." />
     </div>
     
-    <!-- ভাষা এবং প্লেলিস্ট ট্যাব -->
     <div class="tabs-section">
       <span class="tabs-label">🌐 ভাষা (Languages)</span>
       <div class="tabs-wrap" id="categoryTabs">
@@ -249,7 +218,6 @@
       </div>
     </div>
 
-    <!-- চ্যানেলের ধরন বা জেনার ট্যাব -->
     <div class="tabs-section">
       <span class="tabs-label">📺 ধরন (Categories)</span>
       <div class="tabs-wrap" id="genreTabs">
@@ -604,6 +572,11 @@
     video.pause();
     video.removeAttribute('src');
     video.load();
+    
+    // ফোর্স আনমিউট যাতে সাউন্ড বাজে
+    video.muted = false;
+    video.volume = +volEl.value;
+    syncUI();
 
     if (statusOf(ch.id) === 'unknown') {
       showError('লোড হচ্ছে…', 'চ্যানেলটি যাচাই করা হচ্ছে।', true);
@@ -631,7 +604,15 @@
       hls = new Hls({ lowLatencyMode: true });
       hls.loadSource(ch.url);
       hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, () => safePlay());
+      
+      // অডিও ট্র্যাক হ্যান্ডলিং
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        if (hls.audioTracks && hls.audioTracks.length > 0) {
+          hls.audioTrack = 0; // প্রথম অডিও ট্র্যাক সিলেক্ট
+        }
+        safePlay();
+      });
+      
       hls.on(Hls.Events.ERROR, (_e, data) => {
         if (!data.fatal) return;
         if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
@@ -679,6 +660,16 @@
     if (item) playChannel(channels.find(c => c.id === item.dataset.id));
   });
 
+  // ভিডিওতে ক্লিক করলেও মিউট খুলে যাবে
+  video.addEventListener('click', () => {
+    if (video.muted || video.volume === 0) {
+      video.muted = false;
+      if (video.volume === 0) video.volume = 1;
+      volEl.value = video.volume;
+      syncUI();
+    }
+  });
+
   function syncUI() {
     const paused = video.paused;
     $('#btnPlay').textContent = paused ? '▶' : '❚❚';
@@ -694,7 +685,13 @@
   };
 
   $('#btnPlay').onclick = togglePlay;
-  bigPlay.onclick = togglePlay;
+  bigPlay.onclick = () => {
+    video.muted = false; // প্লে করতে চাইলে সাউন্ড অন হবে
+    video.volume = +volEl.value || 1;
+    syncUI();
+    safePlay();
+  };
+  
   $('#btnMute').onclick = () => { video.muted = !video.muted; syncUI(); };
   volEl.oninput = () => { video.volume = +volEl.value; video.muted = +volEl.value === 0; syncUI(); };
   $('#btnFs').onclick = () => {
