@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <meta name="theme-color" content="#0a0e16" />
-<title>SK TV — আমার পার্সোনাল টিভি</title>
+<title>ENGLISH SPUR TV — আমার পার্সোনাল টিভি</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js"></script>
 <style>
   *{box-sizing:border-box}
@@ -68,8 +68,10 @@
   }
   .ch:hover{background:#141d2e;border-color:var(--line)}
   .ch.active{background:linear-gradient(90deg,rgba(124,92,255,.22),rgba(0,212,255,.07));border-color:#3d4f7a}
-  .ch.dead{opacity:.5}
   
+  /* ম্যানুয়ালি ব্লক করা চ্যানেলের স্টাইল */
+  .ch.blocked{opacity:0.4;filter:grayscale(1);}
+
   .ch-num{
     font-size:11.5px;color:var(--muted);min-width:22px;text-align:right;
     font-weight:600;flex:0 0 auto;font-variant-numeric:tabular-nums;
@@ -88,6 +90,16 @@
   .ch-status.ok{background:var(--ok);box-shadow:0 0 8px rgba(34,211,122,.7)}
   .ch-status.dead{background:var(--danger)}
   .ch-status.checking{background:var(--warn);animation:pulse 1s infinite}
+  
+  /* ব্লক বাটনের স্টাইল */
+  .ch-block{
+    opacity:0;padding:6px;border-radius:8px;font-size:12px;color:var(--muted);
+    transition:.15s;flex:0 0 auto;cursor:pointer; background:transparent; border:none;
+  }
+  .ch:hover .ch-block{opacity:1}
+  .ch-block:hover{background:#2a1220;color:var(--danger)}
+  .ch.blocked .ch-block{opacity:1; color:var(--ok);} /* আনব্লক করার জন্য সবুজ */
+
   .empty{color:var(--muted);font-size:12.5px;text-align:center;padding:26px 8px;line-height:1.8}
 
   .sidebar-foot{
@@ -95,6 +107,11 @@
     display:flex;flex-direction:column;gap:8px;
   }
   .foot-row{display:flex;align-items:center;gap:8px}
+  .toggle{
+    display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted);
+    cursor:pointer;user-select:none;white-space:nowrap;
+  }
+  .toggle input{accent-color:#7c5cff;width:14px;height:14px;cursor:pointer}
 
   .main{display:flex;flex-direction:column;gap:14px;padding:18px;min-width:0;overflow-y:auto}
   .nowbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -201,8 +218,12 @@
 
     <div class="list-head" id="listHead">ডাটাবেস লোড হচ্ছে...</div>
     <div id="channelList" class="list"></div>
+    
     <div class="sidebar-foot">
       <button class="btn primary full" id="btnLoadMain">🌐 মেইন ডাটাবেস লোড করুন</button>
+      <div class="foot-row" style="margin-top:6px">
+        <label class="toggle"><input type="checkbox" id="showBlocked"><span>ব্লক/মৃত চ্যানেল দেখাও</span></label>
+      </div>
     </div>
   </aside>
 
@@ -256,9 +277,13 @@
     'हिंदी': 'https://iptv-org.github.io/iptv/languages/hin.m3u',
     'Odia': 'https://iptv-org.github.io/iptv/languages/ori.m3u'
   };
+
+  const LS_BLOCKED = 'bosstv.blocked.v1';
   
   let channels = [];
   let health = {};
+  let manualBlocked = new Set(JSON.parse(localStorage.getItem(LS_BLOCKED)) || []);
+  
   const checking = new Set();
   let currentId = null;
   let currentCategory = 'All';
@@ -273,6 +298,7 @@
   const listEl = $('#channelList');
   const listHead = $('#listHead');
   const searchEl = $('#search');
+  const showBlockedEl = $('#showBlocked');
   const errBox = $('#errBox');
   const errSpin = $('#errSpin');
   const errTitle = $('#errTitle');
@@ -281,9 +307,12 @@
   const controls = $('#controls');
   const volEl = $('#vol');
 
+  function saveBlocked() {
+    localStorage.setItem(LS_BLOCKED, JSON.stringify([...manualBlocked]));
+  }
+
   const statusOf = id => checking.has(id) ? 'checking' : (health[id] === false ? 'dead' : (health[id] === true ? 'ok' : 'unknown'));
 
-  // এখানে sourceLang প্যারামিটার যোগ করা হয়েছে
   function parseM3U(text, targetArray, sourceLang = 'All') {
     const lines = text.split('\n');
     let currentInfo = null;
@@ -310,7 +339,7 @@
             url: line,
             logo: currentInfo.name.slice(0, 3).toUpperCase(),
             group: currentInfo.group,
-            sourceLang: sourceLang // এখানে ভাষা সেট করা হচ্ছে
+            sourceLang: sourceLang
           });
           added++;
         }
@@ -332,7 +361,7 @@
       const text = await res.text();
       
       channels = []; 
-      const added = parseM3U(text, channels, 'All'); // 'All' পাস করা হচ্ছে
+      const added = parseM3U(text, channels, 'All'); 
 
       if (added === 0) throw new Error('No channels parsed');
 
@@ -358,7 +387,7 @@
       if (!res.ok) throw new Error('Fetch failed');
       const text = await res.text();
       
-      const added = parseM3U(text, channels, lang); // 'lang' পাস করা হচ্ছে
+      const added = parseM3U(text, channels, lang); 
       fetchedLanguages.add(lang);
       
       showError('লোড সফল!', `${added}টি ${lang} চ্যানেল পাওয়া গেছে।`);
@@ -386,17 +415,19 @@
 
   function visibleChannels() {
     const q = searchEl.value.trim().toLowerCase();
+    const showBlocked = showBlockedEl.checked;
     
     return channels.filter(c => {
-      // 'All' ট্যাব হলে সব দেখাবে (মেইন ডাটাবেস এবং অন্যান্য ফেচ করা ল্যাঙ্গুয়েজ)
-      if (currentCategory === 'All') {
-        if (!q) return true;
-        return c.name.toLowerCase().includes(q) || (c.group || '').toLowerCase().includes(q);
-      }
+      // ম্যানুয়ালি ব্লক করা চ্যানেল ফিল্টার
+      if (!showBlocked && manualBlocked.has(c.url)) return false;
       
-      // নির্দিষ্ট কোনো ভাষার ট্যাব হলে শুধু সেই ভাষার চ্যানেল দেখাবে
-      if (c.sourceLang !== currentCategory) return false;
+      // অটোমেটিক ডেড চ্যানেল ফিল্টার (যদি ম্যানুয়াল "দেখাও" অন না থাকে)
+      if (!showBlocked && health[c.id] === false) return false;
+
+      // ল্যাঙ্গুয়েজ ফিল্টার
+      if (currentCategory !== 'All' && c.sourceLang !== currentCategory) return false;
       
+      // সার্চ ফিল্টার
       if (!q) return true;
       return c.name.toLowerCase().includes(q) || (c.group || '').toLowerCase().includes(q);
     });
@@ -418,8 +449,10 @@
     
     listEl.innerHTML = toRender.map((c, index) => {
       const st = statusOf(c.id);
+      const isManuallyBlocked = manualBlocked.has(c.url);
+      
       return `
-      <button class="ch ${c.id === currentId ? 'active' : ''} ${st === 'dead' ? 'dead' : ''}" data-id="${esc(c.id)}">
+      <button class="ch ${c.id === currentId ? 'active' : ''} ${isManuallyBlocked ? 'blocked' : ''}" data-id="${esc(c.id)}">
         <span class="ch-num">${index + 1}.</span>
         <span class="ch-logo">${esc(c.logo)}</span>
         <span class="ch-meta">
@@ -427,6 +460,7 @@
           <span class="ch-sub">${esc(c.group)}</span>
         </span>
         <span class="ch-status ${st}"></span>
+        <button class="ch-block" data-block="${esc(c.url)}" title="${isManuallyBlocked ? 'আনব্লক করুন' : 'লুকিয়ে ফেলুন'}">🚫</button>
       </button>`;
     }).join('');
 
@@ -443,6 +477,8 @@
     renderLimit = 150; 
     renderList();
   });
+  
+  showBlockedEl.addEventListener('change', renderList);
 
   function destroyHls() {
     if (hls) { try { hls.destroy(); } catch {} hls = null; }
@@ -479,6 +515,10 @@
 
   async function playChannel(ch) {
     if (!ch) return;
+    
+    // যদি ম্যানুয়ালি ব্লক করা থাকে, প্লে হবে না
+    if (manualBlocked.has(ch.url) && !showBlockedEl.checked) return;
+
     currentId = ch.id;
     $('#npName').textContent = ch.name;
     $('#npGroup').textContent = ch.group;
@@ -538,6 +578,24 @@
   }
 
   listEl.addEventListener('click', e => {
+    // ব্লক বাটনে ক্লিক করলে
+    const blockBtn = e.target.closest('[data-block]');
+    if (blockBtn) {
+      e.preventDefault(); // যাতে চ্যানেল প্লে না হয়ে যায়
+      e.stopPropagation();
+      
+      const url = blockBtn.dataset.block;
+      if (manualBlocked.has(url)) {
+        manualBlocked.delete(url); // আনব্লক
+      } else {
+        manualBlocked.add(url); // ব্লক
+      }
+      saveBlocked();
+      renderList();
+      return;
+    }
+
+    // চ্যানেলে ক্লিক করলে
     const item = e.target.closest('.ch');
     if (item) playChannel(channels.find(c => c.id === item.dataset.id));
   });
