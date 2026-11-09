@@ -20,7 +20,7 @@
     font-family:'Segoe UI',system-ui,-apple-system,'Noto Sans Bengali',sans-serif;
     background:radial-gradient(1200px 700px at 12% -12%,#1b2540 0%,transparent 60%),var(--bg);
   }
-  .app{display:grid;grid-template-columns:320px 1fr;height:100dvh}
+  .app{display:grid;grid-template-columns:340px 1fr;height:100dvh}
 
   .sidebar{
     display:flex;flex-direction:column;min-height:0;
@@ -61,32 +61,33 @@
   .list::-webkit-scrollbar-thumb{background:#26314a;border-radius:8px}
 
   .ch{
-    width:100%;display:flex;align-items:center;gap:10px;
-    padding:10px;margin-bottom:6px;border-radius:12px;cursor:pointer;
+    width:100%;display:flex;align-items:center;gap:8px;
+    padding:10px 8px;margin-bottom:6px;border-radius:12px;cursor:pointer;
     background:transparent;border:1px solid transparent;color:var(--text);
     text-align:left;font-family:inherit;transition:.16s;
   }
   .ch:hover{background:#141d2e;border-color:var(--line)}
   .ch.active{background:linear-gradient(90deg,rgba(124,92,255,.22),rgba(0,212,255,.07));border-color:#3d4f7a}
   .ch.dead{opacity:.5}
+  
+  .ch-num{
+    font-size:11.5px;color:var(--muted);min-width:22px;text-align:right;
+    font-weight:600;flex:0 0 auto;font-variant-numeric:tabular-nums;
+  }
+  .ch.active .ch-num{color:#9fc4ff}
+
   .ch-logo{
-    width:38px;height:38px;flex:0 0 38px;border-radius:10px;display:grid;place-items:center;
-    font-weight:800;font-size:11px;background:#1c2740;color:#9fc4ff;text-transform:uppercase;
+    width:34px;height:34px;flex:0 0 34px;border-radius:8px;display:grid;place-items:center;
+    font-weight:800;font-size:10px;background:#1c2740;color:#9fc4ff;text-transform:uppercase;
   }
   .ch.active .ch-logo{background:var(--grad);color:#08101f}
   .ch-meta{display:flex;flex-direction:column;min-width:0;flex:1}
-  .ch-name{font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .ch-sub{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .ch-status{width:8px;height:8px;border-radius:50%;flex:0 0 auto;background:#3a4763}
+  .ch-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ch-sub{font-size:10.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ch-status{width:7px;height:7px;border-radius:50%;flex:0 0 auto;background:#3a4763}
   .ch-status.ok{background:var(--ok);box-shadow:0 0 8px rgba(34,211,122,.7)}
   .ch-status.dead{background:var(--danger)}
   .ch-status.checking{background:var(--warn);animation:pulse 1s infinite}
-  .ch-edit{
-    opacity:0;padding:5px 7px;border-radius:8px;font-size:12px;color:var(--muted);
-    transition:.15s;flex:0 0 auto;
-  }
-  .ch:hover .ch-edit{opacity:1}
-  .ch-edit:hover{background:#233152;color:#fff}
   .empty{color:var(--muted);font-size:12.5px;text-align:center;padding:26px 8px;line-height:1.8}
 
   .sidebar-foot{
@@ -94,11 +95,6 @@
     display:flex;flex-direction:column;gap:8px;
   }
   .foot-row{display:flex;align-items:center;gap:8px}
-  .toggle{
-    display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted);
-    cursor:pointer;user-select:none;white-space:nowrap;
-  }
-  .toggle input{accent-color:#7c5cff;width:14px;height:14px;cursor:pointer}
 
   .main{display:flex;flex-direction:column;gap:14px;padding:18px;min-width:0;overflow-y:auto}
   .nowbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -162,7 +158,6 @@
     -webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:#fff;
   }
   .spacer{flex:1}
-
   .btn{
     padding:9px 15px;border-radius:11px;border:1px solid var(--line);background:#151e30;
     color:var(--text);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;
@@ -171,37 +166,7 @@
   .btn:hover{background:#1d2942}
   .btn.primary{background:var(--grad);border:none;color:#07101e}
   .btn.primary:hover{filter:brightness(1.12)}
-  .btn.danger{background:#2a121a;border-color:#4a1c2a;color:#ff8b99}
-  .btn.danger:hover{background:#3a1622}
   .btn.full{width:100%}
-  .btn.small{padding:7px 10px;font-size:11.5px;flex:1}
-
-  dialog{
-    border:none;border-radius:18px;padding:0;background:var(--panel);color:var(--text);
-    width:min(440px,92vw);box-shadow:0 30px 90px rgba(0,0,0,.7);
-  }
-  dialog::backdrop{background:rgba(3,6,12,.72);backdrop-filter:blur(4px)}
-  dialog form{padding:20px}
-  dialog h3{margin:0 0 16px;font-size:16px}
-  dialog label{display:block;font-size:12px;color:var(--muted);margin-bottom:12px}
-  dialog input, dialog textarea{
-    width:100%;margin-top:6px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);
-    background:#0c1320;color:var(--text);font-size:13.5px;outline:none;font-family:inherit;
-  }
-  dialog textarea{resize:vertical;min-height:100px}
-  dialog input:focus, dialog textarea:focus{border-color:#3b6cff;box-shadow:0 0 0 3px rgba(59,108,255,.15)}
-  .dlg-actions{display:flex;align-items:center;gap:8px;margin-top:18px}
-  .hint{font-size:11.5px;color:var(--muted);line-height:1.7;margin:0}
-
-  .iptv-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
-  .iptv-grid button{
-    padding:12px;border-radius:10px;border:1px solid var(--line);background:#151e30;
-    color:var(--text);font-weight:600;font-size:13px;cursor:pointer;font-family:inherit;
-    transition:.15s;
-  }
-  .iptv-grid button:hover{background:#1d2942;border-color:#3b6cff}
-  .iptv-grid button.full{grid-column:1 / -1;background:var(--grad);color:#07101e;border:none}
-  .iptv-grid button.full:hover{filter:brightness(1.1)}
 
   @media (max-width:900px){
     .app{grid-template-columns:1fr;grid-template-rows:1fr auto}
@@ -223,7 +188,7 @@
       </div>
     </div>
     <div class="search-wrap">
-      <input id="search" class="search" type="search" placeholder="🔍  চ্যানেল খুঁজুন..." />
+      <input id="search" class="search" type="search" placeholder="🔍  চ্যানেল খুঁজুন (যেমন: ABP, Star)..." />
     </div>
     
     <div class="tabs-wrap" id="categoryTabs">
@@ -234,15 +199,10 @@
       <button class="tab" data-cat="Odia">Odia</button>
     </div>
 
-    <div class="list-head" id="listHead">চ্যানেল যাচাই করা হচ্ছে…</div>
+    <div class="list-head" id="listHead">ডাটাবেস লোড হচ্ছে...</div>
     <div id="channelList" class="list"></div>
     <div class="sidebar-foot">
-      <button class="btn primary full" id="btnIptvOrg">🌐 IPTV-org ডাটাবেস</button>
-      <button class="btn full" id="btnImportM3U" style="margin-top:6px">📥 নিজের M3U ইমপোর্ট</button>
-      <div class="foot-row" style="margin-top:6px">
-        <button class="btn small" id="btnRecheck">🔍 আবার চেক</button>
-        <label class="toggle"><input type="checkbox" id="showDead"><span>মৃত দেখাও</span></label>
-      </div>
+      <button class="btn primary full" id="btnLoadMain">🌐 মেইন ডাটাবেস লোড করুন</button>
     </div>
   </aside>
 
@@ -278,69 +238,6 @@
   </main>
 </div>
 
-<!-- IPTV-org Dialog -->
-<dialog id="iptvOrgDialog">
-  <form method="dialog" style="padding:20px">
-    <h3>🌐 IPTV-org থেকে চ্যানেল লোড করুন</h3>
-    <p class="hint" style="margin-bottom:16px;">আপনার দেওয়া মেইন ডাটাবেসে ১০ হাজারেরও বেশি চ্যানেল আছে। ব্রাউজার স্লো না করার জন্য নিচের যেকোনো একটি অপশন বেছে নিন:</p>
-    
-    <div class="iptv-grid">
-      <button type="button" data-url="https://iptv-org.github.io/iptv/languages/ben.m3u">বাংলা (Bengali)</button>
-      <button type="button" data-url="https://iptv-org.github.io/iptv/languages/hin.m3u">हिंदी (Hindi)</button>
-      <button type="button" data-url="https://iptv-org.github.io/iptv/languages/eng.m3u">English</button>
-      <button type="button" data-url="https://iptv-org.github.io/iptv/languages/ori.m3u">Odia</button>
-      <button type="button" class="full" data-url="https://iptv-org.github.io/iptv/index.m3u">🔥 Full Database (index.m3u)</button>
-    </div>
-    
-    <div class="dlg-actions">
-      <span class="spacer"></span>
-      <button type="button" class="btn" id="iptvCancel">বাতিল</button>
-    </div>
-  </form>
-</dialog>
-
-<dialog id="editDialog">
-  <form id="editForm" method="dialog">
-    <h3 id="dlgTitle">চ্যানেল যোগ করুন</h3>
-    <label>চ্যানেলের নাম *
-      <input name="name" required placeholder="BOSS TV" />
-    </label>
-    <label>স্ট্রিম URL (.m3u8 / .mp4) *
-      <input name="url" placeholder="https://example.com/live/boss/index.m3u8" />
-    </label>
-    <label>লোগো (২–৪ অক্ষর)
-      <input name="logo" maxlength="4" placeholder="BTV" />
-    </label>
-    <label>গ্রুপ
-      <input name="group" placeholder="English / বাংলা / हिंदी" />
-    </label>
-    <div class="dlg-actions">
-      <button type="button" class="btn danger" id="dlgDelete" hidden>ডিলিট</button>
-      <span class="spacer"></span>
-      <button type="button" class="btn" id="dlgCancel">বাতিল</button>
-      <button type="submit" class="btn primary">সেভ</button>
-    </div>
-  </form>
-</dialog>
-
-<dialog id="m3uDialog">
-  <form id="m3uForm" method="dialog">
-    <h3>M3U প্লেলিস্ট ইমপোর্ট করুন</h3>
-    <label>M3U প্লেলিস্ট URL
-      <input name="m3uUrl" placeholder="http://example.com/playlist.m3u" />
-    </label>
-    <p class="hint" style="margin:8px 0;">অথবা সরাসরি M3U টেক্সট পেস্ট করুন:</p>
-    <label>
-      <textarea name="m3uText" placeholder="#EXTM3U&#10;#EXTINF:-1 tvg-logo=&quot;...&quot; group-title=&quot;Sports&quot;,Star Sports 1&#10;http://example.com/stream.m3u8"></textarea>
-    </label>
-    <div class="dlg-actions">
-      <span class="spacer"></span>
-      <button type="button" class="btn" id="m3uCancel">বাতিল</button>
-      <button type="submit" class="btn primary">লোড করুন</button>
-    </div>
-  </form>
-</dialog>
-
 <script>
 (() => {
   'use strict';
@@ -351,90 +248,155 @@
     ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
   const uid = () => (crypto.randomUUID?.() || 'id' + Date.now() + Math.random().toString(36).slice(2, 8));
 
-  const LS_CH     = 'bosstv.channels.v10';
-  const LS_LAST   = 'bosstv.last.v10';
-  const LS_HEALTH = 'bosstv.health.v10';
-  const TTL = 6 * 60 * 60 * 1000;
-
-  // Initial channels to start with
-  const DEFAULT_CHANNELS = [
-    { id: 'dw-en',    name: 'DW English',         group: 'English', logo: 'DW',
-      url: 'https://dwamdstream102.akamaized.net/hls/live/2015525/dwstream102/index.m3u8' },
-    { id: 'aje-en',   name: 'Al Jazeera English', group: 'English', logo: 'AJ',
-      url: 'https://live-hls-web-aje.getaj.net/AJE/index.m3u8' },
-    { id: 'abp-ananda', name: 'ABP Ananda', group: 'বাংলা', logo: 'ABP',
-      url: 'https://abpanandatv.akamaized.net/hls/live/2014413/abpananda/master.m3u8' },
-    { id: 'somoy',    name: 'Somoy News', group: 'বাংলা', logo: 'SOM',
-      url: 'https://somoynews.akamaized.net/hls/live/2006583/somoynews/master.m3u8' },
-    { id: 'mux-demo', name: 'Demo Stream (Test)', group: 'English', logo: 'TEST',
-      url: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8' }
-  ];
-
-  let channels   = loadChannels();
-  let health     = loadHealth();
+  const MAIN_M3U_URL = 'https://iptv-org.github.io/iptv/index.m3u';
+  
+  const LANG_URLS = {
+    'English': 'https://iptv-org.github.io/iptv/languages/eng.m3u',
+    'বাংলা': 'https://iptv-org.github.io/iptv/languages/ben.m3u',
+    'हिंदी': 'https://iptv-org.github.io/iptv/languages/hin.m3u',
+    'Odia': 'https://iptv-org.github.io/iptv/languages/ori.m3u'
+  };
+  
+  let channels = [];
+  let health = {};
   const checking = new Set();
-  let currentId  = null;
+  let currentId = null;
   let currentCategory = 'All';
-  let hls        = null;
-  let editTargetId = null;
-  let hasError   = false;
-  let booting    = true;
+  let hls = null;
+  let hasError = false;
+  let isFetching = false;
+  const fetchedLanguages = new Set(); 
+  let renderLimit = 150; 
 
-  function loadChannels() {
-    try {
-      const raw = localStorage.getItem(LS_CH);
-      if (!raw) return structuredClone(DEFAULT_CHANNELS);
-      const arr = JSON.parse(raw);
-      return Array.isArray(arr) && arr.length ? arr : structuredClone(DEFAULT_CHANNELS);
-    } catch { return structuredClone(DEFAULT_CHANNELS); }
-  }
-  function saveChannels() { try { localStorage.setItem(LS_CH, JSON.stringify(channels)); } catch {} }
-  function loadHealth()   { try { return JSON.parse(localStorage.getItem(LS_HEALTH)) || {}; } catch { return {}; } }
-  function saveHealth()   { try { localStorage.setItem(LS_HEALTH, JSON.stringify(health)); } catch {} }
-
-  const isFresh  = id => { const h = health[id]; return !!h && (Date.now() - h.ts) < TTL; };
-  const isDead   = id => { const h = health[id]; return !!h && isFresh(id) && !h.ok; };
-  const isOk     = id => { const h = health[id]; return !!h && isFresh(id) && h.ok; };
-  const statusOf = id => checking.has(id) ? 'checking' : (isDead(id) ? 'dead' : (isOk(id) ? 'ok' : 'unknown'));
-
-  function markDead(id) {
-    if (!id) return;
-    health[id] = { ok: false, ts: Date.now() };
-    saveHealth(); renderList();
-  }
-
-  const video    = $('#video');
-  const stage    = $('#stage');
-  const listEl   = $('#channelList');
+  const video = $('#video');
+  const stage = $('#stage');
+  const listEl = $('#channelList');
   const listHead = $('#listHead');
   const searchEl = $('#search');
-  const showDead = $('#showDead');
-  const errBox   = $('#errBox');
-  const errSpin  = $('#errSpin');
+  const errBox = $('#errBox');
+  const errSpin = $('#errSpin');
   const errTitle = $('#errTitle');
-  const errText  = $('#errText');
-  const bigPlay  = $('#bigPlay');
+  const errText = $('#errText');
+  const bigPlay = $('#bigPlay');
   const controls = $('#controls');
-  const volEl    = $('#vol');
-  const dialog   = $('#editDialog');
-  const form     = $('#editForm');
-  const m3uDialog= $('#m3uDialog');
-  const m3uForm  = $('#m3uForm');
-  const iptvDialog = $('#iptvOrgDialog');
+  const volEl = $('#vol');
+
+  const statusOf = id => checking.has(id) ? 'checking' : (health[id] === false ? 'dead' : (health[id] === true ? 'ok' : 'unknown'));
+
+  // এখানে sourceLang প্যারামিটার যোগ করা হয়েছে
+  function parseM3U(text, targetArray, sourceLang = 'All') {
+    const lines = text.split('\n');
+    let currentInfo = null;
+    let added = 0;
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (line.startsWith('#EXTINF:')) {
+        currentInfo = { name: 'Unknown', logo: 'TV', group: 'Other' };
+        
+        const nameMatch = line.match(/,(.+)$/);
+        if (nameMatch) currentInfo.name = nameMatch[1].trim();
+        
+        const groupMatch = line.match(/group-title="([^"]+)"/);
+        if (groupMatch) currentInfo.group = groupMatch[1].trim();
+        
+      } else if (line && !line.startsWith('#') && currentInfo) {
+        const n = currentInfo.name.toLowerCase();
+        const g = currentInfo.group.toLowerCase();
+        if (!n.includes('xxx') && !n.includes('adult') && !g.includes('xxx') && !g.includes('adult')) {
+          targetArray.push({
+            id: uid(),
+            name: currentInfo.name,
+            url: line,
+            logo: currentInfo.name.slice(0, 3).toUpperCase(),
+            group: currentInfo.group,
+            sourceLang: sourceLang // এখানে ভাষা সেট করা হচ্ছে
+          });
+          added++;
+        }
+        currentInfo = null;
+      }
+    }
+    return added;
+  }
+
+  async function loadMainDatabase() {
+    if (isFetching) return;
+    isFetching = true;
+    showError('মেইন ডাটাবেস লোড হচ্ছে…', 'প্রায় ১০ হাজার চ্যানেলের লিস্ট আনা হচ্ছে, অপেক্ষা করুন।', true);
+    listHead.textContent = 'ডাটাবেস ডাউনলোড হচ্ছে...';
+
+    try {
+      const res = await fetch(MAIN_M3U_URL);
+      if (!res.ok) throw new Error('Network error');
+      const text = await res.text();
+      
+      channels = []; 
+      const added = parseM3U(text, channels, 'All'); // 'All' পাস করা হচ্ছে
+
+      if (added === 0) throw new Error('No channels parsed');
+
+      showError('ডাটাবেস লোড সফল!', `${added}টি চ্যানেল পাওয়া গেছে।`);
+      isFetching = false;
+      renderList();
+
+    } catch (err) {
+      isFetching = false;
+      showError('লোড করা যায়নি', 'ইন্টারনেট বা CORS সমস্যা থাকতে পারে। আবার চেষ্টা করুন।');
+      listHead.textContent = 'লোড ব্যর্থ';
+    }
+  }
+
+  $('#btnLoadMain').onclick = loadMainDatabase;
+
+  async function loadLanguage(lang) {
+    if (fetchedLanguages.has(lang)) return;
+    
+    showError(`${lang} চ্যানেল লোড হচ্ছে…`, 'iptv-org থেকে চ্যানেল আনা হচ্ছে।', true);
+    try {
+      const res = await fetch(LANG_URLS[lang]);
+      if (!res.ok) throw new Error('Fetch failed');
+      const text = await res.text();
+      
+      const added = parseM3U(text, channels, lang); // 'lang' পাস করা হচ্ছে
+      fetchedLanguages.add(lang);
+      
+      showError('লোড সফল!', `${added}টি ${lang} চ্যানেল পাওয়া গেছে।`);
+      renderList();
+    } catch (err) {
+      showError('লোড করা যায়নি', `${lang} চ্যানেল আনা সম্ভব হয়নি।`);
+    }
+  }
 
   $('#categoryTabs').addEventListener('click', e => {
     if (!e.target.classList.contains('tab')) return;
     $$('.tab').forEach(t => t.classList.remove('active'));
     e.target.classList.add('active');
-    currentCategory = e.target.dataset.cat;
-    renderList();
+    
+    const newCat = e.target.dataset.cat;
+    currentCategory = newCat;
+    renderLimit = 150; 
+    
+    if (currentCategory !== 'All' && !fetchedLanguages.has(currentCategory)) {
+      loadLanguage(currentCategory);
+    } else {
+      renderList();
+    }
   });
 
   function visibleChannels() {
     const q = searchEl.value.trim().toLowerCase();
+    
     return channels.filter(c => {
-      if (!showDead.checked && isDead(c.id)) return false;
-      if (currentCategory !== 'All' && c.group !== currentCategory) return false;
+      // 'All' ট্যাব হলে সব দেখাবে (মেইন ডাটাবেস এবং অন্যান্য ফেচ করা ল্যাঙ্গুয়েজ)
+      if (currentCategory === 'All') {
+        if (!q) return true;
+        return c.name.toLowerCase().includes(q) || (c.group || '').toLowerCase().includes(q);
+      }
+      
+      // নির্দিষ্ট কোনো ভাষার ট্যাব হলে শুধু সেই ভাষার চ্যানেল দেখাবে
+      if (c.sourceLang !== currentCategory) return false;
+      
       if (!q) return true;
       return c.name.toLowerCase().includes(q) || (c.group || '').toLowerCase().includes(q);
     });
@@ -442,98 +404,45 @@
 
   function renderList() {
     const items = visibleChannels();
-    const okCount   = channels.filter(c => isOk(c.id)).length;
-    const deadCount = channels.filter(c => isDead(c.id)).length;
-    const unknown   = channels.filter(c => statusOf(c.id) === 'unknown').length;
-
-    listHead.innerHTML = checking.size
-      ? `<span>⏳ ${checking.size}টি চ্যানেল যাচাই হচ্ছে…</span>`
-      : `<span style="color:#22d37a">● ${okCount} চলছে</span>` +
-        (deadCount ? `<span style="color:#ff4d5e">● ${deadCount} বন্ধ</span>` : '') +
-        (unknown ? `<span>● ${unknown} অপেক্ষমাণ</span>` : '');
+    const okCount = items.filter(c => health[c.id] === true).length;
+    
+    listHead.innerHTML = `<span>মোট: ${items.length}টি চ্যানেল</span>`;
+    if (okCount > 0) listHead.innerHTML += `<span style="color:#22d37a">● ${okCount} চলছে</span>`;
 
     if (!items.length) {
-      listEl.innerHTML = `<p class="empty">
-        এই ক্যাটাগরিতে কোনো চ্যানেল পাওয়া যায়নি।<br>
-        ${deadCount ? `🔴 ${deadCount}টি লিংক কাজ করছে না — “মৃত দেখাও” টিক দিয়ে দেখুন।` : ''}
-      </p>`;
+      listEl.innerHTML = `<p class="empty">এই ক্যাটাগরিতে কোনো চ্যানেল পাওয়া যায়নি।</p>`;
       return;
     }
 
-    listEl.innerHTML = items.map(c => {
+    const toRender = items.slice(0, renderLimit);
+    
+    listEl.innerHTML = toRender.map((c, index) => {
       const st = statusOf(c.id);
       return `
       <button class="ch ${c.id === currentId ? 'active' : ''} ${st === 'dead' ? 'dead' : ''}" data-id="${esc(c.id)}">
-        <span class="ch-logo">${esc(c.logo || (c.name || '?').slice(0, 2).toUpperCase())}</span>
+        <span class="ch-num">${index + 1}.</span>
+        <span class="ch-logo">${esc(c.logo)}</span>
         <span class="ch-meta">
           <span class="ch-name">${esc(c.name)}</span>
-          <span class="ch-sub">${esc(c.group || 'অন্যান্য')}</span>
+          <span class="ch-sub">${esc(c.group)}</span>
         </span>
-        <span class="ch-status ${st}" title="${{ok:'চলছে',dead:'বন্ধ',checking:'চেক হচ্ছে',unknown:'অজানা'}[st]}"></span>
-        <span class="ch-edit" data-edit="${esc(c.id)}" title="এডিট">✎</span>
+        <span class="ch-status ${st}"></span>
       </button>`;
     }).join('');
-  }
 
-  function setNowPlaying(ch) {
-    $('#npName').textContent = ch ? ch.name : 'চ্যানেল সিলেক্ট করুন';
-    $('#npGroup').textContent = ch ? (ch.group || '') : '';
-  }
-
-  async function testStream(url, timeout = 8000) {
-    if (!url) return false;
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), timeout);
-    try {
-      const res = await fetch(url, { signal: ctrl.signal, cache: 'no-store' });
-      if (!res.ok) return false;
-      const txt = await res.text();
-      return txt.includes('#EXTM3U') || txt.includes('#EXT-X-');
-    } catch (err) {
-      clearTimeout(timer);
-      if (err.name === 'AbortError') return false;
-      try {
-        const ctrl2 = new AbortController();
-        const timer2 = setTimeout(() => ctrl2.abort(), timeout);
-        await fetch(url, { mode: 'no-cors', signal: ctrl2.signal });
-        clearTimeout(timer2);
-        return video.canPlayType('application/vnd.apple.mpegurl') !== '';
-      } catch (err2) {
-        return false;
-      }
-    } finally {
-      clearTimeout(timer);
+    if (items.length > renderLimit) {
+      listEl.innerHTML += `<button class="btn full" id="btnLoadMore" style="margin-top:10px">আরও ${items.length - renderLimit}টি চ্যানেল দেখুন</button>`;
+      $('#btnLoadMore').onclick = () => {
+        renderLimit += 150;
+        renderList();
+      };
     }
   }
 
-  async function checkAll(force = false) {
-    const targets = channels.filter(c => c.url && (force || !isFresh(c.id)));
-    if (!targets.length) { renderList(); return; }
-
-    if (booting && !currentId) {
-      showError('চ্যানেল যাচাই করা হচ্ছে…', 'প্রতিটি লিংক টেস্ট করে দেখা হচ্ছে। কাজ করা প্রথম চ্যানেলটাই অটো-প্লে হবে।', true);
-    }
-
-    let i = 0;
-    const run = async () => {
-      while (i < targets.length) {
-        const ch = targets[i++];
-        checking.add(ch.id);
-        renderList();
-        const ok = await testStream(ch.url);
-        checking.delete(ch.id);
-        health[ch.id] = { ok, ts: Date.now() };
-        renderList();
-
-        if (ok && !currentId) playChannel(ch, true);
-      }
-    };
-    // Limit concurrency to 3 to avoid freezing browser
-    await Promise.all([run(), run(), run()]);
-    saveHealth();
+  searchEl.addEventListener('input', () => {
+    renderLimit = 150; 
     renderList();
-    booting = false;
-  }
+  });
 
   function destroyHls() {
     if (hls) { try { hls.destroy(); } catch {} hls = null; }
@@ -555,53 +464,57 @@
     if (p && typeof p.catch === 'function') p.catch(() => syncUI());
   }
 
-  // ON-DEMAND HEALTH CHECK for large lists
-  async function playChannel(ch, fromBoot = false) {
+  async function testStream(url, timeout = 6000) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), timeout);
+    try {
+      await fetch(url, { signal: ctrl.signal, mode: 'no-cors' });
+      clearTimeout(timer);
+      return true; 
+    } catch (err) {
+      clearTimeout(timer);
+      return false; 
+    }
+  }
+
+  async function playChannel(ch) {
     if (!ch) return;
     currentId = ch.id;
-    try { localStorage.setItem(LS_LAST, ch.id); } catch {}
-    setNowPlaying(ch);
+    $('#npName').textContent = ch.name;
+    $('#npGroup').textContent = ch.group;
     renderList();
     hideError();
     destroyHls();
-    booting = false;
 
     video.pause();
     video.removeAttribute('src');
     video.load();
-    $('#liveBadge').style.display = 'none';
 
-    const url = (ch.url || '').trim();
-    if (!url) {
-      showError('এই চ্যানেলের স্ট্রিম লিংক নেই', '✎ আইকনে ক্লিক করে একটি .m3u8 লিংক বসান।');
-      return;
-    }
-
-    // If status is unknown, check it right now before playing
     if (statusOf(ch.id) === 'unknown') {
-      showError('চ্যানেল লোড হচ্ছে…', 'লিংকটি যাচাই করা হচ্ছে, অপেক্ষা করুন।', true);
-      checking.add(ch.id);
-      renderList();
+      showError('লোড হচ্ছে…', 'চ্যানেলটি যাচাই করা হচ্ছে।', true);
+      checking.add(ch.id); renderList();
       
-      const ok = await testStream(url);
+      const ok = await testStream(ch.url);
       
       checking.delete(ch.id);
-      health[ch.id] = { ok, ts: Date.now() };
-      saveHealth();
+      health[ch.id] = ok;
       renderList();
       
       if (!ok) {
-        showError('স্ট্রিম পাওয়া যায়নি', 'লিংকটি কাজ করছে না বা সার্ভার ডাউন আছে।');
+        showError('চ্যানেলটি বন্ধ', 'এই লিংকটি এখন কাজ করছে না।');
         return;
       }
-      hideError();
+    } else if (statusOf(ch.id) === 'dead') {
+      showError('চ্যানেলটি বন্ধ', 'এই লিংকটি কাজ করছে না।');
+      return;
     }
 
-    const isHls = /\.m3u8(\?|#|$)/i.test(url);
+    hideError();
+    const isHls = /\.m3u8(\?|#|$)/i.test(ch.url);
 
     if (isHls && window.Hls && Hls.isSupported()) {
-      hls = new Hls({ lowLatencyMode: true, backBufferLength: 60, maxBufferLength: 30 });
-      hls.loadSource(url);
+      hls = new Hls({ lowLatencyMode: true });
+      hls.loadSource(ch.url);
       hls.attachMedia(video);
       hls.on(Hls.Events.MANIFEST_PARSED, () => safePlay());
       hls.on(Hls.Events.ERROR, (_e, data) => {
@@ -612,19 +525,22 @@
           hls.recoverMediaError();
         } else {
           destroyHls();
-          markDead(ch.id);
-          if (!fromBoot) showError('স্ট্রিম লোড করা যায়নি', 'এই লিংকটা আর কাজ করছে না।');
+          health[ch.id] = false;
+          renderList();
+          showError('স্ট্রিম কাজ করছে না', 'সার্ভারটি সাড়া দিচ্ছে না।');
         }
       });
       safePlay();
-    } else if (isHls && video.canPlayType('application/vnd.apple.mpegurl')) {
-      video.src = url;
-      safePlay();
     } else {
-      video.src = url;
+      video.src = ch.url;
       safePlay();
     }
   }
+
+  listEl.addEventListener('click', e => {
+    const item = e.target.closest('.ch');
+    if (item) playChannel(channels.find(c => c.id === item.dataset.id));
+  });
 
   function syncUI() {
     const paused = video.paused;
@@ -640,246 +556,27 @@
     if (video.paused) safePlay(); else video.pause();
   };
 
-  $('#btnPlay').onclick   = togglePlay;
-  bigPlay.onclick         = togglePlay;
-  $('#btnMute').onclick   = () => { video.muted = !video.muted; syncUI(); };
-  volEl.oninput           = () => { video.volume = +volEl.value; video.muted = +volEl.value === 0; syncUI(); };
-  $('#btnFs').onclick     = () => {
+  $('#btnPlay').onclick = togglePlay;
+  bigPlay.onclick = togglePlay;
+  $('#btnMute').onclick = () => { video.muted = !video.muted; syncUI(); };
+  volEl.oninput = () => { video.volume = +volEl.value; video.muted = +volEl.value === 0; syncUI(); };
+  $('#btnFs').onclick = () => {
     if (!document.fullscreenElement) stage.requestFullscreen?.().catch(() => {});
     else document.exitFullscreen?.();
   };
-  $('#btnPip').onclick    = () => {
+  $('#btnPip').onclick = () => {
     if (document.pictureInPictureElement) document.exitPictureInPicture?.();
     else video.requestPictureInPicture?.().catch(() => {});
   };
   $('#btnReload').onclick = () => playChannel(channels.find(c => c.id === currentId));
 
-  video.addEventListener('play',  syncUI);
+  video.addEventListener('play', syncUI);
   video.addEventListener('pause', syncUI);
   video.addEventListener('playing', () => { hideError(); syncUI(); });
   video.addEventListener('volumechange', syncUI);
-  video.addEventListener('error', () => {
-    if (!currentId) return;
-    markDead(currentId);
-    showError('ভিডিও চালানো যাচ্ছে না', 'এই লিংকটা সাড়া দিচ্ছে না।');
-  });
 
-  let hideTimer;
-  stage.addEventListener('mousemove', () => {
-    controls.classList.add('show');
-    clearTimeout(hideTimer);
-    hideTimer = setTimeout(() => controls.classList.remove('show'), 2600);
-  });
-
-  listEl.addEventListener('click', e => {
-    const editBtn = e.target.closest('[data-edit]');
-    if (editBtn) { e.stopPropagation(); openDialog(editBtn.dataset.edit); return; }
-    const item = e.target.closest('.ch');
-    if (item) playChannel(channels.find(c => c.id === item.dataset.id));
-  });
-
-  searchEl.addEventListener('input', renderList);
-  showDead.addEventListener('change', renderList);
-  $('#btnRecheck').onclick = () => {
-    currentId = null;
-    destroyHls();
-    video.pause(); video.removeAttribute('src'); video.load();
-    setNowPlaying(null);
-    booting = true;
-    checkAll(true);
-  };
-
-  function openDialog(id) {
-    editTargetId = id || null;
-    const ch = id ? channels.find(c => c.id === id) : null;
-    $('#dlgTitle').textContent = ch ? 'চ্যানেল এডিট করুন' : 'চ্যানেল যোগ করুন';
-    form.name.value  = ch?.name  || '';
-    form.url.value   = ch?.url   || '';
-    form.logo.value  = ch?.logo  || '';
-    form.group.value = ch?.group || 'English';
-    $('#dlgDelete').hidden = !ch;
-    dialog.showModal();
-    setTimeout(() => form.name.focus(), 50);
-  }
-
-  $('#btnAdd').onclick    = () => openDialog(null);
-  $('#dlgCancel').onclick = () => dialog.close();
-
-  $('#dlgDelete').onclick = () => {
-    if (!editTargetId) return;
-    channels = channels.filter(c => c.id !== editTargetId);
-    delete health[editTargetId];
-    if (currentId === editTargetId) {
-      currentId = null;
-      destroyHls();
-      video.pause(); video.removeAttribute('src'); video.load();
-      setNowPlaying(null);
-      showError('চ্যানেল ডিলিট করা হয়েছে', 'লিস্ট থেকে নতুন চ্যানেল বেছে নিন।');
-    }
-    saveChannels(); saveHealth(); renderList(); dialog.close();
-  };
-
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    const fd = new FormData(form);
-    const data = {
-      name:  (fd.get('name')  || '').toString().trim(),
-      url:   (fd.get('url')   || '').toString().trim(),
-      logo:  (fd.get('logo')  || '').toString().trim(),
-      group: (fd.get('group') || '').toString().trim() || 'অন্যান্য'
-    };
-    if (!data.name) return;
-
-    let target;
-    if (editTargetId) {
-      const i = channels.findIndex(c => c.id === editTargetId);
-      channels[i] = { ...channels[i], ...data };
-      target = channels[i];
-      delete health[target.id];
-    } else {
-      target = { id: uid(), ...data };
-      channels.push(target);
-    }
-    saveChannels(); saveHealth();
-    dialog.close(); editTargetId = null;
-
-    playChannel(target);
-  });
-
-  $('#btnImportM3U').onclick = () => {
-    m3uForm.reset();
-    m3uDialog.showModal();
-  };
-  $('#m3uCancel').onclick = () => m3uDialog.close();
-
-  m3uForm.addEventListener('submit', async e => {
-    e.preventDefault();
-    const fd = new FormData(m3uForm);
-    const url = (fd.get('m3uUrl') || '').toString().trim();
-    let text = (fd.get('m3uText') || '').toString().trim();
-
-    m3uDialog.close();
-
-    if (url) {
-      showError('প্লেলিস্ট ডাউনলোড হচ্ছে…', 'অনুগ্রহ করে অপেক্ষা করুন।', true);
-      try {
-        const res = await fetch(url);
-        if (!res.ok) throw new Error('Fetch failed');
-        text = await res.text();
-      } catch (err) {
-        showError('প্লেলিস্ট লোড করা যায়নি', 'লিংকটি CORS ব্লক করতে পারে। সরাসরি M3U টেক্সট পেস্ট করে চেষ্টা করুন।');
-        return;
-      }
-    }
-
-    processM3U(text);
-  });
-
-  // IPTV-org Dialog Logic
-  $('#btnIptvOrg').onclick = () => iptvDialog.showModal();
-  $('#iptvCancel').onclick = () => iptvDialog.close();
-
-  iptvDialog.addEventListener('click', async e => {
-    if (e.target.tagName === 'BUTTON' && e.target.dataset.url) {
-      const url = e.target.dataset.url;
-      iptvDialog.close();
-      showError('IPTV-org ডাটাবেস লোড হচ্ছে…', 'হাজার হাজার চ্যানেলের বড় ফাইল, কয়েক সেকেন্ড অপেক্ষা করুন।', true);
-      
-      try {
-        const res = await fetch(url);
-        if (!res.ok) throw new Error('Fetch failed');
-        const text = await res.text();
-        processM3U(text, true);
-      } catch (err) {
-        showError('লোড করা যায়নি', 'গিটহাব থেকে ফাইলটি আনা সম্ভব হয়নি। ইন্টারনেট চেক করুন।');
-      }
-    }
-  });
-
-  function processM3U(text, isIptvOrg = false) {
-    if (!text.includes('#EXTM3U')) {
-      showError('ভুল ফরম্যাট', 'এটি সঠিক M3U প্লেলিস্ট ফাইল নয়।');
-      return;
-    }
-
-    const lines = text.split('\n');
-    let added = 0;
-    let currentInfo = null;
-
-    // Use a Set to prevent duplicate URLs if they already exist
-    const existingUrls = new Set(channels.map(c => c.url));
-
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i].trim();
-      if (line.startsWith('#EXTINF:')) {
-        currentInfo = { name: 'Unknown', logo: 'TV', group: 'IPTV' };
-        
-        // Extract name
-        const nameMatch = line.match(/,(.+)$/);
-        if (nameMatch) currentInfo.name = nameMatch[1].trim();
-        
-        // Extract Group (Language or Category)
-        const groupMatch = line.match(/group-title="([^"]+)"/);
-        if (groupMatch) {
-          currentInfo.group = groupMatch[1].trim();
-        } else if (isIptvOrg) {
-           // Try to extract language
-           const langMatch = line.match(/tvg-language="([^"]+)"/);
-           if (langMatch) currentInfo.group = langMatch[1].trim();
-        }
-      } else if (line && !line.startsWith('#') && currentInfo) {
-        if (!existingUrls.has(line)) {
-          channels.push({
-            id: uid(),
-            name: currentInfo.name,
-            url: line,
-            logo: currentInfo.name.slice(0, 3).toUpperCase(),
-            group: currentInfo.group
-          });
-          existingUrls.add(line);
-          added++;
-        }
-        currentInfo = null;
-      }
-    }
-
-    if (added > 0) {
-      saveChannels();
-      renderList();
-      
-      // DO NOT auto-check everything if we added a massive list!
-      // The on-demand checking in `playChannel` will handle it.
-      showError('চ্যানেল যোগ হয়েছে!', `${added}টি নতুন চ্যানেল লিস্টে যোগ করা হয়েছে। ক্লিক করে দেখুন।`);
-      
-      // Auto-switch to "All" tab to show the new channels
-      $$('.tab').forEach(t => t.classList.remove('active'));
-      $('[data-cat="All"]').classList.add('active');
-      currentCategory = 'All';
-      renderList();
-    } else {
-      showError('নতুন চ্যানেল নেই', 'এই প্লেলিস্টের সব চ্যানেল আগে থেকেই আপনার লিস্টে আছে।');
-    }
-  }
-
-  document.addEventListener('keydown', e => {
-    if (dialog.open || m3uDialog.open || iptvDialog.open) return;
-    if (/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName) && e.key !== 'Escape') return;
-    switch (e.key.toLowerCase()) {
-      case ' ': case 'k': e.preventDefault(); togglePlay(); break;
-      case 'm': video.muted = !video.muted; syncUI(); break;
-      case 'f': $('#btnFs').click(); break;
-      case 'r': $('#btnReload').click(); break;
-      case 'arrowup':   e.preventDefault(); video.volume = Math.min(1, video.volume + .1); volEl.value = video.volume; syncUI(); break;
-      case 'arrowdown': e.preventDefault(); video.volume = Math.max(0, video.volume - .1); volEl.value = video.volume; syncUI(); break;
-    }
-  });
-
-  renderList();
+  loadMainDatabase();
   syncUI();
-  
-  // Initial check for the built-in channels only
-  checkAll(false);
-
 })();
 </script>
 </body>
